@@ -1,0 +1,527 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Lazy Looping</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/truthful.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/github.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+      <section>
+
+        <section data-background="#ffffff" data-background-transition="zoom" data-transition="zoom" data-transition-speed="fast">
+          <h1>Lazy Looping</h1>
+          <h2>The Next Iteration</h2>
+          <p>
+          <small><a href="https://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
+          </p>
+          <aside class="notes" data-markdown>
+            TODO
+          </aside>
+        </section>
+
+        <section>
+          <div class="aboutme-card">
+            <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos" alt="Truthful Technology"></a>
+          </div>
+          <div class="aboutme-card">
+            <a href="http://pythonmorsels.com"><img src="morsels-logo.svg" class="no-style aboutme-logos" alt="Python Morsels"></a>
+          </div>
+          <aside class="notes" data-markdown>
+            - My name is Trey
+            - I help Python &amp; Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
+            - And I run a Python exercise subscription service where where I send out 1 Python exercise every week.  It's called Python Morsels.
+            - TODO
+          </aside>
+        </section>
+
+      </section>
+
+      <section>
+        <h2>Our Objectives</h2>
+        <ul>
+          <li class="fragment">Create iterables</li>
+          <li class="fragment">Create iterators</li>
+          <li class="fragment">Use iterables and iterators to clean up our code</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO iterables are anything that you can loop over
+            - lists, strings, sets, dictionaries, generators, files, zip objects, enumerate objects... and many other things things in Python are iterables
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Iterables are powered by iterators
+            - Anytime you loop over an iterable, Python does 2 things:
+              1. It grabs an iterator from that iterable using the built-in `iter` function.  You can use this function to get an iterator from any iterable in Python
+              2. After Python grabs an iterator from your iterable, it will use that iterator to loop over your iterator.  It does this by calling the built-in `next` function on that iterator over and over until it gets a `StopIteration` exception.
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Iterators are the thing that powers `for` loops in Python
+          - You can think of a `for` loop as equivalent to this code
+          - So from Python's perspective, the definition of an iterable, as an object that you can get an iterator from and then use `next` to loop over that iterator
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - A strange fact about iterators that is *not* obvious from that definition: iterators are also iterables
+          - That means you can loop over an iterator by asking *it* for an iterator
+          - Anyone know what iterators give you when you ask them for an iterator?
+          - Themselves!
+          - When you ask an iterator for an iterator it will give you itself back, because it already *is* an iterator.  That's kind of clever and kind of weird, but that's how iterators work.
+          - This means that you can think of iterators as lazy single-use iterables: they compute their next item as you loop over them and when you stop looping over them and start up again you'll start where you left off
+          - They're like tally counters... or Hello Kitty PEZ dispensers
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - So that's the four minute summary of my Loop Better talk
+          - It's a 25-30 minute talk so I glossed over a few things just now.  You can go watch it later.
+          - Let's take a quick look at our objectives again
+        </aside>
+      </section>
+
+      <section>
+        <h2>Our Objectives</h2>
+        <ul>
+          <li class="fragment">Create iterables</li>
+          <li class="fragment">Create iterators</li>
+          <li class="fragment">Use iterables and iterators to clean up our code</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class CountUp:
+    def __init__(self, stop=10):
+        self.stop = 10
+    def __iter__(self):
+        return some_sort_of_iterator()
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Let's try to create an iterables class from scratch.  This will be a class that counts from 1 to 10.
+          - We need a class that can be passed to the built-in `iter` function
+          - This `iter` function relies on a dunder method in Python, just like the `len` function and the `+` symbol do
+          - If we want to allow instances of *our* class to be iterable, we need to add a `__iter__` method to our class
+          - What should this `__iter__` method return?
+          - What does the `iter` built-in function return?
+          - An iterator!  The `iter` function is the way we ask an iterable for an iterator.
+          - So we need to put what we're doing on *pause* and figure out how to make an iterator.
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class CountUpIterator:
+    def __init__(self, stop=10):
+        self.stop = 10
+        self.num = 1
+    def __next__(self):
+        """Return the next item."""
+    def __iter__(self):
+        return self
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - An iterator needs to work with the built-in `next` function
+          - The `next` function also calls a dunder method: the `__next__` method
+          - So if we want this class we're making to have objects that work with the `next` function, we need to create a `__next__` method
+          - Iterators actually need something else though
+          - Remember I said that iterators are also iterables?
+          - What do iterables need to have?
+          - A `__iter__` method!... so that we can pass an iterator to the built-in `iter` function.
+          - And what do iterators give us when we ask them for an iterator?
+          - Themselves!  So we need to `return self`.
+          - Alright we need to figure out how to implement that `__next__` method...
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class CountUpIterator:
+    def __init__(self, stop=10):
+        self.stop = 10
+        self.num = 1
+    def __next__(self):
+        if self.num >= self.stop:
+            raise StopIteration(f"{self.stop} already reached.")
+        n = self.num
+        self.num += 1
+        return n
+    def __iter__(self):
+        return self
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - We want to count from 1 to 10 so every time `__next__` is called we need to return the next number we're looking for
+          - We're going to start off our number at `0` by making an initializer which sets `self.number` to `0`
+          - Then we're going to increment that number in our `__next__` method and return it
+          - We need to do something else though... when is our counting supposed to stop?
+          - We're supposed to stop at 10.
+          - We're supposed to be able to call `next` on this iterator over and over until we reach 10... what should our iterator do after 10?
+          - Raise a `StopIteration` exception!
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class CountUp:
+    def __init__(self, stop=10):
+        self.stop = 10
+    def __iter__(self):
+        return CountUpIterator(self.stop)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - So this is our iterator
+          - Let's go back to our iterable class now
+          - What should `__iter__` return?
+          - An iterator... so we want to return an instance of our iterator class
+          - How do we know whether all of this code works now?
+          - We can try iterating!
+          - Let's make a new instance of our `Counter` iterable class and loop over it with a `for` loop
+          - What should we see as we loop?  The numbers 1 to 10.
+          - We'll print those numbers out as we loop.
+          - And our code works, we've just made an iterator class and an iterable class.
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> my_iterable = CountUp()
+>>> my_iterator = CountUpIterator()
+>>> list(my_iterable)
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+>>> list(my_iterator)
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+>>> list(my_iterator)
+[]
+>>> list(my_iterable)
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - What is the difference between that iterable class and that iterator class?
+          - Which one can we loop over?
+          - Either of them!
+          - When we loop over the `Counter` object it will return a new instance of our `CounterIterator` class to us and we'll call `next` on that over and over
+          - When we loop over the `CounterIterator` object, it will return *itself* to us and we'll call `next` on it over and over
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - There is a big difference between these two though
+          - What will happen when we loop over `CounterIterator` a second time?
+          - It'll be empty.  We've *exhausted* this iterator.
+          - If we loop over `Counter` a second time, we'll call `iter` on it to get an iterator and it'll return a *fresh* iterator to us... so every time we loop over `Counter` we'll get the same thing
+          - Iterators are stateful: they keep track of where they are as you loop over them.  Iterables which are *not* iterators don't do this.
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def count_up(stop=10):
+    while n &lt;= stop:
+        yield n
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Creating an iterator was the difficult part here.  There's actually an easier way to create iterators though.
+          - Who has herd the term "generator"?
+          - A generator is the easier way to create an iterator
+          - This is a generator function.  It looks very similar to a regular Python function, but it is *not* a function.
+          - The presence of that `yield` statement turns this previously normal Python function into a completely different animal
+          - When we call a function it gives us its return value.  When we call a generator function, it returns a new generator object to us.
+          - Generators *are* iterators
+          - We can call `next` on them over and over and if we ask them for an iterator, they'll return themselves to us
+          - So this generator function here is *equivalent* to this `CounterIterator` class we made before
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def hello():
+    print("Hello world")
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+def hello():
+    if False:
+        yield None
+    print("Hello world")
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO Generator functions vs functions
+            - generator functions are bizarre
+            - `yield` magically turns a function into a generator function
+            - Here's a function which prints `hello world`
+            - If we put `if False: yield None` in this function, that `yield` statement will never be reached, but our function is no longer a function
+            - What will happen when we call this function now?
+            - We get a generator!
+            - hello world was not printed
+            - If we ask for the next item, we'll get a `StopIteration` exception, but before that "hello world" was printed out
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def count_up(stop=10):
+    while n &lt;= stop:
+        yield n
+
+def gimme_five():
+    return 5
+
+class Thing:
+    def __init__(self, name):
+        self.name = name
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> count_up()
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - generator functions, functions, and classes are all "callables" meaning we can use parenthesis to call them and get something back
+          - When we call a generator function it gives us a generator, which is an iterator.        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class CountUp:
+    def __init__(self, stop=10):
+        self.stop = 10
+    def __iter__(self):
+        while n &lt;= stop:
+            yield n
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - When Python calls our `__iter__` method, what is it expecting to get back?
+          - An iterator!
+          - So we can actually implement `__iter__` using a generator function
+          - This is actually the most common way to implement `__iter__`, because there's no point in writing out a whole class with `__init__`, `__iter__`, and `__next__` methods when we could write a generator function that does the same thing
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def count_up(stop=10):
+    for n in range(1, stop+1):
+        yield n
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def count_up(stop=10):
+    return (
+        n
+        for n in range(1, stop+1)
+    )
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This is a generator expression.  It looks like a list comprehension, but it doesn't return a list to us: it returns a generator.
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=4>class SomeClass(Todo)</span>:
+    <span class="fragment bold-current" data-fragment-index=5>x: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
+    y: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
+    z: float <span class="fragment current-visible" data-fragment-index=6>= 0</span><span class="fragment" data-fragment-index=7></span></span></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Let's talk about working *with* iterators: what can you do with these things?
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - making helpers that wrap around other iterables is very common
+          - want to loop over multiple iterables at the same time? You could implement an iterator function that does that!  (note: this is built-in to Python and called the zip function)
+          - want to take an iterable and loop over it until a certain condition is met?  Say a way to turn this loop into something like this?
+          - want to confirm that all items in an iterable match a given condition?
+          - or find the first item which matches a given condition?
+          - want to concatenate iterables together?  Maybe concatenating lines from a number of log files for example?
+          - or get just the first n items of an iterator?
+          - or just get unique items from an iterable?
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - want to count upward forever?
+          - want to make an iterator stop after a certain condition is met?
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO itertools has lots of helpers, as do third-party libraries like more-itertools and boltons
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO we can learn from looking at the source code for other iteration helpers
+          - common techniques
+            - Grab an iterator from an iterable and work with that for the rest of your function
+            - Use next to grab just a few things (or use islice)
+            - Use a couple loops over the same iterator (or use takewhile/dropwhile/etc.)
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO how do Django's iterables and iterators work? (querysets)
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO Laziness: it’s not just about iterators (2 minutes)
+          - You can make iterables that compute lazily but are not iterators
+          - Example: range objects are not iterators
+          - Try not to assume something is an iterator (or a non-iterator)
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO Using iteration helpers to write more elegant code (4 minutes)
+          - regardless of whether you're inventing your own iteration helpers or reaching for helpers written by others, using iteration helpers can really improve the readability of your code
+          - Using with_previous/with_next/window/pairwise-like helpers to remove “side cars”
+          - Using any/all instead of early break/return
+          - Using dropwhile/takewhile instead of early break
+          - Using next instead of an early return/break
+          - Using islice instead of manual next
+          - Iterators allow for more descriptive code
+        </aside>
+      </section>
+
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO Conclusion
+          - Iterables give iterators and iterators give each item individually
+          - Iterators are the backbone of looping in Python
+          - Iterators also empower lazy iteration and working directly with iterators can allow you to write more flexible code
+          - Iterators allow you to write your code in a different way
+        </aside>
+      </section>
+
+      <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
+        <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
+        <h3>
+          <strong>Trey Hunner</strong><br>
+          <small>Python &amp; Django Team Trainer</small>
+        </h3>
+        <p>
+          <small>
+            Contact me: <a href="mailto:&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;">&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;</a>
+          </small>
+        </p>
+        <p>
+        <a href="http://truthful.technology"><img src="logo.svg" class="no-style logo"></a>
+        <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
+        </p>
+        <aside class="notes" data-markdown>
+          - I'd love to help you improve your Python skills
+          - Find me in the halls or at my booth if you'd like to chat about that later
+          - Thank you!
+        </aside>
+      </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script src="js/truthful.js"></script>
+
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
