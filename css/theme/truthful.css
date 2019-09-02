@@ -333,6 +333,13 @@ section.has-dark-background a:hover {
   .reveal .slides section .fragment.bold-current.current-fragment {
     font-weight: bold; }
 
+.reveal .slides section .fragment.underline,
+.reveal .slides section .fragment.underline-current {
+  opacity: 1;
+  visibility: inherit; }
+  .reveal .slides section .fragment.underline.visible,
+  .reveal .slides section .fragment.underline-current.current-fragment {
+    text-decoration: underline; }
 
 /* Multi-columns layout */
 .container {
