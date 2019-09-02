@@ -95,6 +95,20 @@
       </section>
 
       <section>
+        <h2>Iterator</h2>
+        <aside class="notes" data-markdown>
+          - TODO Explain iterators without mentioning that iterators are their own iterators
+          - Iterators are two things really:
+            1. they're a special type of iterable that is consumed as you loop over it
+            2. they're the object that powers all iteration in Python: all iterables are iterator-powered
+          - That second definition is kind of confusing and it doesn't matter for this talk
+          - We only care about that first definition and that's what we'll be talking about right now
+          - If you are interested in that second definition, watch my other talk: Loop Better.
+        </aside>
+      </section>
+
+      <!--
+      <section>
         <h2>Iterables use iterators for looping</h2>
         <pre class="python"><code data-trim data-noescape>
 >>> <span class="fragment">numbers = {2, 1, 3}
@@ -176,6 +190,7 @@ def my_for_loop(iterable, action_to_do):
           - They're like
         </aside>
       </section>
+      -->
 
         <section data-background-image="tally-counter.jpg">
           <aside class="notes" data-markdown>
@@ -202,6 +217,7 @@ def my_for_loop(iterable, action_to_do):
         </aside>
       </section>
 
+      <!--
       <section>
         <h2>Iterable</h2>
         <p>Any object which can give you an iterator to use for looping over it.</p>
@@ -209,6 +225,7 @@ def my_for_loop(iterable, action_to_do):
           - TODO
         </aside>
       </section>
+      -->
 
       <section>
         <pre class="python"><code data-trim data-noescape>
@@ -263,10 +280,14 @@ def my_for_loop(iterable, action_to_do):
       <section>
         <h2>Making iterables and iterators</h2>
         <aside class="notes" data-markdown>
-          - TODO
+          - TODO simplify this section:
+            - Skip straight to showing generator functions as a way to make a function which returns an iterator
+            - talk about generator expressions as a shorter form of generator functions, a way to make a lazy iterator without even making a whole new function
+            - show wrapping iterators around iterators to compose a lazy iteration pipeline of sorts
         </aside>
       </section>
 
+      <!--
       <section>
         <pre class="python"><code data-trim data-noescape>
 class CountUp:
@@ -494,6 +515,7 @@ def count_up(stop=10):
           - This generator function does *the same thing* as that iterator class
         </aside>
       </section>
+      -->
 
       <section>
         <pre class="python"><code data-trim data-noescape>
@@ -633,6 +655,7 @@ StopIteration</span>
         </aside>
       </section>
 
+      <!--
       <section>
         <pre class="python"><code data-trim data-noescape>
 class CountUp:
@@ -726,6 +749,7 @@ class CountUpIterator:
           - A generator expression
         </aside>
       </section>
+      -->
 
       <section>
         <pre class="python"><code data-trim data-noescape>
@@ -753,6 +777,7 @@ def count_up(stop=10):
         </aside>
       </section>
 
+      <!--
       <section data-transition="slide-in fade-out">
         <ul>
           <li class="fragment" data-fragment-index=1><strong class="fragment underline-current" data-fragment-index=4>Iterable</strong>: anything that you can loop over</li>
@@ -765,6 +790,7 @@ def count_up(stop=10):
           - TODO
         </aside>
       </section>
+      -->
 
       <section data-transition="fade-in slide-out">
         <ul>
@@ -776,7 +802,9 @@ def count_up(stop=10):
           <span class="fragment" data-fragment-index=10></span>
         </ul>
         <aside class="notes" data-markdown>
-          - TODO
+          - TODO simplify this greatly!!!
+          - Instead show all three on the screen with their words above them (generator function example, generator expression example, generator object (aka "generator") which is the thing we get back from calling a generator function or evaluating a generator expression)
+          - Then apologize and note that the Python documentation calls these by different names, ones which I both disagree with and don't hear used quite as frequently by most Python programmers
         </aside>
       </section>
 
@@ -795,6 +823,7 @@ def count_up(stop=10):
       <section>
         <h2>What can we do with lazy iterables?</h2>
         <aside class="notes" data-markdown>
+          - TODO simplify this section
           - Let's talk about working *with* iterators: what can you do with these things?
           - We're going to make some tools that take lazy iterables and do something with them, usually that means returning new lazy iterables... but not always
         </aside>
