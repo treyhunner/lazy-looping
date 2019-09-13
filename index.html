@@ -58,7 +58,57 @@
       <section>
 
       <section>
-        <h2>The Problem</h2>
+        <h2>Problem 1</h2>
+        <h3 class="fragment">Find logged errors (with context)</h3>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = None
+    for next in log_file:
+        next = next.rstrip('\n')
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    if line and 'error' in line.lower():
+        print(prev, line, None, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO explain this one and show an example
+        </aside>
+      </section>
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    lines = [
+        line.rstrip('\n')
+        for line in log_file
+    ]
+    for i, line in enumerate(lines):
+        prev = lines[i-1] if i > 0 else None
+        next = lines[i+1] if i+1 &lt; len(lines) else None
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO explain this one and show an example
+        </aside>
+      </section>
+      -->
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Problem 2</h2>
+        <h3 class="fragment">Find first 10 errors from yesterday</h3>
         <aside class="notes" data-markdown>
           - TODO
         </aside>
@@ -90,6 +140,7 @@ with open('log.txt') as log_file:
         </aside>
       </section>
 
+      <!--
       <section data-transition="fade-in fade-out">
         <pre class="python"><code data-trim data-noescape>
 from datetime import date, timedelta
@@ -145,44 +196,52 @@ with open('log.txt') as log_file:
           - TODO after this say (with highlighting) that this loops over the lines, finding the ones we're looking for, and printing them out, and then stops after we've found 10... whereas this (other solution) loops over all the lines to store all the ones we're looking for and then only prints out the first 10 afterward... these are very different answers. The second one looks cleaner but it does a lot more work... if we're processing a 10GB log file, it's probably going to take a lot more time to run
         </aside>
       </section>
+      -->
 
       </section>
 
       <section>
 
       <section>
-        <h2><span class="fragment" data-fragment-index=3>What are </span><span class="fragment" data-fragment-index=1>iterables</span><span class="fragment" data-fragment-index=2> and iterators</span><span class="fragment" data-fragment-index=3>?</span></h2>
+        <h2 class="fragment current-visible" data-fragment-index=1>Lazy Looping</h2>
+        <h2><span class="fragment" data-fragment-index=4>What are </span><span class="fragment" data-fragment-index=2>iterables</span><span class="fragment" data-fragment-index=3> and iterators</span><span class="fragment" data-fragment-index=4>?</span></h2>
         <aside class="notes" data-markdown>
-          - So there are two things we need to define first
-          - iterables **(click)**
-          - ... and iterators **(click)**
-          - We're going to start **(click)** with some definitions
+          - Lazy Looping is all about iterables and iterators
+          - So the first thing we need to do is define what iterables and iterators are...
         </aside>
       </section>
 
       <section>
         <h3>Iterable</h3>
         <p class="fragment">An iterable is anything you can loop over.</p>
+        <pre class="python fragment"><code data-trim data-noescape>
+for thing in <span class="fragment bold-current">my_iterable</span>:
+    do_something_with(thing)
+        </code></pre>
         <aside class="notes" data-markdown>
+          - TODO better speaker notes to fit what's on the slide
           - An iterable is **(click)** anything that you can loop over
-          - lists, strings, sets, dictionaries, files, and lots of other things things in Python are iterables
-          - Anything you can use a `for` loop to loop over is an iterable
-          - TODO show `for` loop on this slide
+          - lists, strings, tuples, dictionaries, files, and lots of other things things in Python are iterables
+          - If you can write a `for` loop to iterate over some object it is, by definition, an iterable
+          - We're mostly already intuitively familiar with iterables... but what are iterators?
         </aside>
       </section>
 
       <section>
-        <h3>Iterator</h3>
-        <p class="fragment" data-fragment-index=1><span class="fragment strike" data-fragment-index=4>The thing that powers iterables</span></p>
-        <p class="fragment" data-fragment-index=2><span class="fragment bold-current" data-fragment-index=3>A special kind of "lazy" iterable</span></p>
+        <h3>Iter<span class="fragment bold-current" data-fragment-index=1>ator</span></h3>
+        <span class="fragment" data-fragment-index=2></span>
+        <p class="fragment" data-fragment-index=3><span class="fragment strike" data-fragment-index=6>The thing that powers iterables</span></p>
+        <p class="fragment" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=7>A special kind of "lazy" iterable</span></p>
         <aside class="notes" data-markdown>
-          - Iter-*ators* are a bit more complicated than iter-*ables*
-          - There are really two definitons of iterators:
+          - TODO redo the transitions and speaker notes here to better fit with previous slide
+          - An iter-*ator* is a bit more complicated than an iter-*able*
+          - ...
+          - There are two definitons of iterators:
             1. First: Iterators are the objects that powers all iteration in Python: you can get an iterator from any iterable in order to loop over one item at a time
             2. Second: you can think of iterators as a special kind of *lazy* iterable which is *consumed* as you loop over
-          - We're going to focus mostly on that *second* definition
-          - The first definition is *kind of* out of the scope of this talk
-          - If you care about the first definition, I have a talk for you watch later...
+          - We're going to ignore that first definition.  It doesn't really matter to us right now.
+          - We're going to focus mostly on that *second* definition.
+          - If you *are* interested in that first definition...
         </aside>
       </section>
 
@@ -195,11 +254,1244 @@ with open('log.txt') as log_file:
         </p>
         </div>
         <aside class="notes" data-markdown>
-          - It's called Loop Better, and I gave it at a few regional Python conferences a couple years ago
-          - That talk is all about how `for` loops work in Python and how iterables are powered by something called "the iterator protocol"
-          - But we're pretty much going to skip over all of that right now...
+          - ... you can watch another talk of mine, called Loop Better
+          - In it I talk about how `for` loops work under the hood in Python and a bunch of other stuff that's outside the scope of this talk today...
         </aside>
       </section>
+
+      <section>
+        <h3 class="fragment" data-fragment-index=2>Files are iterators</h3>
+        <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment" data-fragment-index=1>my_file = open("my_file.txt")
+>>> </span><span class="fragment">next(my_file)
+'This is line 1 of the file'
+>>> </span><span class="fragment">next(my_file)
+'This is line 2 of the file'
+>>> </span><span class="fragment">for line in my_file:
+...     print(line, end="")
+...
+</span><span class="fragment">This is line 3 of the file
+This is line 4 of the file
+>>> </span><span class="fragment">list(my_file)</span><span class="fragment">
+[]</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - So we know what iterables are and we can think of examples of them...
+          - But what's an example of an iterator?  Where do we see these things in Python?
+          - One example of an iterable is a file.
+          - In Python, **file objects are iterators**: files are *lazy iterables*...
+          - By lazy I mean they get *consumed* as you loop over them
+          - We can do two things with an iterators:
+            - We can pass them to Python's built-in `next` function, which gives us the *next* in them
+            - ... with files that gives us the next line in the file
+            - The other, more common thing, we can do with any iterator is loop over it: just like an other iterable in Python
+          - But iterators are **lazy iterables**, which means they *consume* items as you loop over them
+          - So if you start getting items from them, either by calling `next` or by looping, and then you **stop**... the next time you *start* again, you'll be right where you left off
+          - TODO add bolding just before this to line 3 and line 2 to show we started up where we left off
+          - And if you loop all the way through an iterator and then try to loop over it again... **it'll be empty**
+          - We sometimes say that an iterator that doesn't have any more items in it is **exhausted**: which means its job is done and it doesn't have any use anymore
+          - Iterators only go in **one direction**: forwards: they have no *memory* of what came before
+        </aside>
+      </section>
+
+      <section>
+        <h3>The rules of iterators</h3>
+        <ol>
+          <li class="fragment">Looping over an iterator "consumes" items from it</li>
+          <li class="fragment">The <code>next</code> function consumes just one item</li>
+        </ol>
+        <aside class="notes" data-markdown>
+          - There are two **rules** that indicate whether something is an iterator
+            1. When you loop over an iterator, you'll **consume** items from it
+            2. And if you pass it to the  `next` function, you'll consume just *one* from it
+          - Any iterable which is consumed as you loop over it is *almost certainly* an iterator and anything you can pass to the `next` function is *definitely* an iterator
+          - ...
+          - Because we consume items from iterators as we loop over them, you can think of iterators as like...
+        </aside>
+      </section>
+
+      <section data-background-image="hello-kitty-pez.jpg">
+        <aside class="notes" data-markdown>
+          - Hello Kitty PEZ dispensers.
+          - When you take a PEZ out, it's gone: you've **consumed** it
+          - And once the dispenser is empty, it's useless: there's no way to reload it
+          - Iterators are **lazy, single-use** iterables
+        </aside>
+      </section>
+
+      <section data-background-image="swag-bags.jpg">
+        <aside class="notes" data-markdown>
+          - TODO If you have to transport all of these boxes of canvas bags for your conference, you could try to have one person take every single box and stack them all up and walk around with them...
+          - TODO or...
+        </aside>
+      </section>
+
+      <section data-background-image="rami-swag-bags.jpg">
+        <aside class="notes" data-markdown>
+          - TODO you could take one bag at a time... that's the lazy way to do it... it might take you a while
+          - TODO why "lazy"?  Well in the case of files... when you loop over a 1GB log file... you'll read each line of that file one at a time... technically Python maintains a small buffer of lines, but from our perspective we're getting one line at a time... when we read lines from our 1GB file, we're certainly not going to expect our system memory to spike by 1GB suddenly... Python never actually stores the whole file in memory: it reads from it lazily... and it's able to do this because it's behaving like an lazy iterable: an iterator
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <h3>Lazy Looping</h3>
+        <ul>
+          <li class="fragment">looping over an iterator</li>
+          <li class="fragment">creating an iterator</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - So we haven't really talked about this phrase: lazy looping... or what "laziness" means
+          - So when I the phrase "lazy looping" I'm either referring to:
+            - Looping over an iterator, which is a lazy iterable
+            - Or creating our own iterator, which can be looped over later
+          - Lazy looping is all about iterators
+          - ...
+          - We already *know* how to loop over an iterator: we write a `for` loop, just like any other time we're looping
+          - So...
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>How do you create iterators?</h2>
+        <aside class="notes" data-markdown>
+          - How do we create iterators?
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment">e = enumerate(['one', 'two', 'three', 'four'])
+>>> </span><span class="fragment">e</span>
+<span class="fragment">&lt;enumerate object at 0x7fe8b3a55c18>
+>>> </span><span class="fragment">next(e)
+(0, 'one')
+>>> </span><span class="fragment">for thing in e:
+...     print(e)
+...</span>
+<span class="fragment">(1, 'two')</span>
+<span class="fragment">(2, 'three')</span>
+<span class="fragment">(3, 'four')
+>>> </span><span class="fragment">for thing in e:
+...     print(e)
+...</span><span class="fragment">
+>>></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - We know that file objects in Python are iterators...
+          - Another place we get an iterator from is Python's `enumerate` function
+          - When we call `enumerate` we get back an `enumerate` object... and this object is an iterator
+          - So just like other iterators, we can call `next` on it, or as we'd usually do with `enumerate` ... we can loop over it
+          - And *as we loop over it*, it's *creating* two-item tuples that we're *consuming* from it
+          - So if we loop over it a second time... it'll be empty
+          - Because we've already consumed everything in this iterator
+          - ...
+          - Let's try to recreate this `enumerate` function...
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+def enumerate(iterable, start=0):
+    n = start
+    <span class="fragment bold-current" data-fragment-index=1><span class="fragment fade-out" data-fragment-index=5>values = []</span></span>
+    for item in iterable:
+        <span class="fragment bold-current" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=6>values.append((n, item))</span></span>
+        n += 1
+    <span class="fragment bold-current" data-fragment-index=2><span class="fragment fade-out" data-fragment-index=4>return values</span></span><span class="fragment" data-fragment-index=3></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This function is very similar to the built-in `enumerate` function... except there's one big difference: it's not lazy... by that I mean that it doesn't return an iterator
+          - Instead of computing items as we loop over it, it just builds up a whole list of tuples right when we call it...
+          - And then returns them to us
+          - We can make this function into an iterator though...
+          - And we can do it by actually *removing* code from it
+          - First we'll remove the `return` statement
+          - Then we'll remove the empty `values` list
+          - Then that `values.append` call (which doesn't make any sense anymore)... it's going to turn into **a `yield` statement**
+        </aside>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+def enumerate(iterable, start=0):
+    n = start
+
+    for item in iterable:
+        yield (n, item)
+        n += 1<span>
+
+</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This thing we've just made...
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <h3 class="fragment" data-fragment-index=0>Generator function</h3>
+        <pre class="python"><code data-trim data-noescape>
+def enumerate(iterable, start=0):
+    n = start
+    for item in iterable:
+        <span class="fragment bold-current" data-fragment-index=6>yield (n, item)</span>
+        n += 1
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+>>> e = enumerate(['one', 'two', 'three', 'four'])
+>>> <span class="fragment" data-fragment-index=2>next(e)
+(0, 'one')
+>>> </span><span class="fragment" data-fragment-index=3>list(e)
+[(1, 'two'), (2, 'three'), (3, 'four')]
+>>> </span><span class="fragment" data-fragment-index=4>list(e)</span>
+<span class="fragment" data-fragment-index=5>[]</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - ... is called a **generator function**
+          - Generator functions return iterators when you call them
+          - So when we call this `enumerate` function we've just made... we can take the thing we get back from it and
+            - call `next` on it
+            - And we can loop over it
+            - And if we loop over twice, it'll be empty the second time
+            - Because our generator function returned **an iterator** to us: just the like the built-in `enumerate` does
+          - That `yield` statement turned what was a **regular function** into a **generator function**
+          - And generator functions are pretty different from normal functions
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=1>def gimme_five():
+    print('Start!')
+    return 5
+</span>
+<span class="fragment" data-fragment-index=8>def enumerate(iterable, start=0):
+    print('Start?')
+    n = 1
+    for item in iterable:
+        <span class="fragment bold-current" data-fragment-index=13>yield (n, item)</span>
+        n += 1
+</span>
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment" data-fragment-index=3>x = gimme_five()</span>
+<span class="fragment" data-fragment-index=4>Start!
+>>> </span><span class="fragment" data-fragment-index=5>x
+</span><span class="fragment" data-fragment-index=6>5
+>>> </span><span class="fragment" data-fragment-index=9>y = enumerate(["purple", "blue", "pink"])</span><span class="fragment" data-fragment-index=10>
+>>> </span><span class="fragment" data-fragment-index=11>y
+</span><span class="fragment" data-fragment-index=12>&lt;generator object enumerate at 0x7febbdeaae58></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - If you have a regular function in Python...
+          - And you call it
+          - It'll execute that function
+          - And if we look at the thing it gave us back
+          - We'll see its return value
+          - But if you take a generator function
+          - And you call it...
+          - Nothing happens
+          - And if we look at what it gave us back...
+          - We'll see it gave us a generator object
+          - **Functions** and **generator functions** are *completely* different animals: all because of that `yield` statement
+          - When we call a function, we gets return value
+          - When we call a generator function we get a generator object.
+          - And generator objects are iterators, the same way *file* objects are iterators
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def enumerate(iterable, start=0):
+    <span class="fragment bold-current" data-fragment-index=1>print('start!')</span>
+    n = start
+    <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=19>for item in iterable</span>:
+        <span class="fragment bold-current" data-fragment-index=1>print('about to yield')</span></span>
+        <span class="fragment bold-current" data-fragment-index=12><span class="fragment bold-current" data-fragment-index=3>yield (n, item)</span></span>
+        <span class="fragment bold-current" data-fragment-index=17><span class="fragment bold-current" data-fragment-index=8>print('incrementing!')</span></span>
+        n += 1
+    <span class="fragment bold-current" data-fragment-index=20>print('all done!')</span>
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment" data-fragment-index=0>for <span class="fragment bold-current" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=13>n, color</span></span> in <span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=7>enumerate(["purple", "pink"])</span></span>:
+...     <span class="fragment bold-current" data-fragment-index=14><span class="fragment bold-current" data-fragment-index=5>print(f"Color {n} is {color}")</span></span>
+...</span>
+<span class="fragment" data-fragment-index=2>start!
+about to yield</span>
+<span class="fragment" data-fragment-index=6>Color 0 is purple</span>
+<span class="fragment" data-fragment-index=9>incrementing</span>
+<span class="fragment" data-fragment-index=11>about to yield</span>
+<span class="fragment" data-fragment-index=15>Color 1 is pink</span>
+<span class="fragment" data-fragment-index=18>incrementing</span>
+<span class="fragment" data-fragment-index=21>all done!</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - To explain how generator functions *work* we're going to loop over a generator object and walk through every step of what our code does along the way...
+          - This is going to be quick so if you've been asleep up to this point, maybe wake up for a minute or so
+          - When we loop over the generator object we get back from our custom `enumerate` generator function...
+          - It's going to start executing our function
+          - So we'll see those first couple print calls happen
+          - And then Python gets to the `yield` statement and it puts the generator on pause and yields control back to our loop: passing that back to us
+          - We then executing the body of our loop which prints something out
+          - And then we ask the generator for its next item
+          - ...which means it's going to start up again where it left off, right after that last `yield`
+          - So it prints, and then it gets to another iteration of its loop, prints again, and then yields again
+          - Which puts it on pause, and passes another item back to us...
+          - And we execute the body of our loop, which prints something out
+          - And then we ask for another item again... which starts our generator executing where it left off, which means it'll print again
+          - And then try to loop, but see that there aren't more items to loop over, so it'll execute the rest of the generator function
+          - And then when it returns, it'll be exhausted: there are no more items in this generator. So we're done looping.
+          - ...
+          - TODO generator functions are different from regular functions... regular functions can control what they return to you, whereas a generator function always returns a generator to you... but that generator is an iterator: a lazy iterable, and yield statements are the thing that control the laziness: the passing of a message back to the code that's looping over it
+          - TODO unlike regular functions, generator functions are a very special purpose tool: they're specifically for making a function which returns a lazy iterable, an iterator, that can do work and then put itself on pause to give you its next item
+        </aside>
+      </section>
+
+      <section>
+        TODO
+        <aside class="notes" data-markdown>
+          - TODO drive home the point: passing a 10GB log file to a generator function doesn't result in all the lines in that file being stored in memory... as we loop over the generator, it'll loop over lines our log file
+          - TODO perfect place to use a generator is when you want to take some... (figure out the tweetable statement here)
+          - TODO show trivial example (not <p> thing... that's too much) and show how we can make a generator function to move some of the logic out of it
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> numbers = [2, 1, 3, 4, 7, 11]
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+def square_all(numbers):
+    for n in numbers:
+        yield n**2
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> squares = (n**2 for n in numbers)
+>>> <span class="fragment">squares_list = [n**2 for n in numbers]
+>>> </span><span class="fragment">squares_list
+</span><span class="fragment">[4, 1, 9, 16, 49, 121]
+>>> </span><span class="fragment">squares</span><span class="fragment">
+&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+          - This is a generator expression.  It looks like a list comprehension, but it doesn't return a list to us: it returns a generator.
+          - This... is equivalent ... **(click)** to this
+          - Generator expressions are not necessarily shorter than generator functions, but you can inline them into other code, just like you can inline list comprehensions
+          - So instead of making a whole function just to make a lazy iterable, **(click)** you can write a single expression
+          - I do want to note that this example of counting from 1 to 10 is silly and it's very contrived... we're going to look at a couple more realistic examples in a bit
+          - But first... let's talk about all these fancy words I've been using
+          - TODO highlight things while saying:
+            -  Generator functions and generator expressions are a special syntax for creating iterators in Python. 
+            - this is a generator function (because of that yield statement) and this is a generator expression
+            - calling a generator function or evaluating a generator expression will give you a generator object: which is an iterator, which is a lazy single-use iterable
+        </aside>
+      </section>
+
+      <section>
+        <h3>How to make iterators</h3>
+        <ol>
+          <li class="fragment" data-fragment-index=1>Write a generator function <span class="fragment" data-fragment-index=3>(calling it returns an iterator)</span></li>
+          <li class="fragment" data-fragment-index=2>Make a generator expression <span class="fragment" data-fragment-index=4>(which makes an iterator)</span></li>
+          <li class="fragment" data-fragment-index=5><span class="fragment strike" data-fragment-index=6>Make an iterator class</span></li>
+        </ol>
+        <aside class="notes" data-markdown>
+          - TODO
+          - You can think of generators as the easiest way to make an iterator
+          - Great... we can make iterators, but once we've got an iterator... what do we do with it?
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>How are iterators used?</h2>
+        <aside class="notes" data-markdown>
+          - We already know the obvious thing to do with an iterator...
+        </aside>
+      </section>
+
+      <section>
+        <h3>Looping over iterators</h3>
+        <pre class="python fragment"><code data-trim data-noescape>
+squares = (n**2 for n in range(1000))
+<span class="fragment">total = 0
+for n in squares:
+    total += n</span>
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+squares = (n**2 for n in range(1000))
+total = sum(squares)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Loop over it.
+          - We loop over it and do something with each of the things inside it
+          - So if we have an iterator of squares of numbers
+          - We could add up all those squares by loop with a `for` loop and adding as we go
+          - Or we could delegate this work to Python's `sum` function, which will do the looping and the adding for us
+          - Regardless of how we do it: the one thing this iterator will ultimately be used for is being looped over
+          - But there is one thing we could do with an iterator *before* we loop over it...
+        </aside>
+      </section>
+
+      <section>
+        <h3>Wrapping iterators in iterators</h3>
+        <pre class="python fragment"><code data-trim data-noescape>
+<span class="fragment">squares = (n**2 for n in range(1000))
+</span><span class="fragment">palindromic_squares = (
+    n
+    for n in squares
+    if str(n) == str(n)[::-1]
+)
+</span><span class="fragment">for n in palindromic_squares:
+    if 100 &lt;= n &lt; 1000:
+        print(n)</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show csv.reader wrapping a file object as an example instead of this... then a generator wrapping that to identify only rows where one column is a certain value and then taking the output of a different column and converting it to a float to then pass to the sum function
+        </aside>
+      </section>
+
+      <section>
+        <h3>Wrapping iterators in iterators</h3>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=3>import csv
+</span><span class="fragment" data-fragment-index=2>with open('expenses.csv') as expenses_file:</span><span class="fragment" data-fragment-index=4>
+    expense_rows = <span class="fragment bold-current" data-fragment-index=13>csv.reader</span>(<span class="fragment bold-current" data-fragment-index=12>expenses_file</span>)</span>
+    <span class="fragment" data-fragment-index=10>travel_costs = <span class="fragment bold-current" data-fragment-index=15>sum</span>(</span><span class="fragment bold-current" data-fragment-index=14><span class="fragment" data-fragment-index=6><span class="fragment fade-out" data-fragment-index=11>(</span>
+        <span class="fragment" data-fragment-index=9>float(cost)</span>
+        <span class="fragment" data-fragment-index=7>for date, merchant, cost, category in expenses_row</span>
+        <span class="fragment" data-fragment-index=8>if category == 'travel'</span>
+    <span class="fragment fade-out" data-fragment-index=11>)</span></span></span><span class="fragment" data-fragment-index=10>)</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show csv.reader wrapping a file object as an example instead of this... then a generator wrapping that to identify only rows where one column is a certain value and then taking the output of a different column and converting it to a float to then pass to the sum function
+        </aside>
+      </section>
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    for prev, line, next in around(strip_newlines(log_file)):
+        <span class="fragment bold-current">if 'error' in line.lower()</span>:
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    <span class="fragment">errors_with_context = (
+        (prev, curr, next)
+        for prev, curr, next in around(strip_newlines(log_file))
+        if 'error' in curr.lower()
+    )</span>
+    <span class="fragment">for prev, line, next in errors_with_context:
+        print(prev, line, next, sep='\n')</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+      -->
+
+      <section>
+        <h2>What do you do with iterators?</h2>
+        <ol>
+          <li class="fragment" data-fragment-index=1>Wrap another iterator around them <span class="fragment" data-fragment-index=4>by
+              <ul>
+                <li>passing them to a generator function</li>
+                <li class="fragment" data-fragment-index=5>creating a generator expression</li>
+                <li class="fragment" data-fragment-index=6>calling another iterator-returning function</li>
+              </ul>
+          </li>
+          <li class="fragment" data-fragment-index=2>Loop over them<span class="fragment" data-fragment-index=3>, but only once</span>
+            <ul>
+              <li class="fragment" data-fragment-index=7>writing a <code>for</code> loop <span class="fragment" data-fragment-index=8>or a list comprehension</span></li>
+              <li class="fragment" data-fragment-index=9>calling another function that will do the looping</li>
+            </ul>
+          </li>
+        </ol>
+        <aside class="notes" data-markdown>
+          - TODO before this show heads inside heads inside heads image or dolls inside dolls or something
+          - TODO there are two general ways to do both of these things... manually or by delegation
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Utility functions <span class="fragment">for iterators</span></h2>
+        <aside class="notes" data-markdown>
+          - TODO maybe put this after the by_paragraphs thing and then show other implementations, both easy and hard and talk about how we can make our own lazy iteration helpers by either mashing other ones together or writing a generator function ourselves
+          - TODO show more definitions/equivalent functions
+            - map and filter
+            - takewhile
+            - dropwhile
+            - count
+          - TODO other interesting helpers you could invent
+            - first_match (next on a generator expression)
+            - deep_flatten
+            - all_equal
+            - Example with Django queryset iterator (Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
+          - TODO show classical example of a generator function with `fib`
+          - Making our own iteration helpers is useful, but there are lots that are already built-in to Python
+          - And of course the best code is code that you don't have to write at all
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['pink', 'blue', 'purple']
+>>> <span class="fragment">for n, color in enumerate(colors, start=1):
+...     print(n, color)
+...</span>
+<span class="fragment">1 pink</span>
+<span class="fragment">2 blue</span>
+<span class="fragment">3 purple</span>
+        </code></pre>
+        <pre class="python fragment current-visible"><code data-trim data-noescape>
+def enumerate(iterable, start=0):
+    n = start
+    for element in iterable:
+        yield n, element
+        n += 1
+        </code></pre><span class="fragment"></span>
+        <aside class="notes" data-markdown>
+          - Who has used Python's enumerate function?
+          - `enumerate` is a function which takes an iterable and returns an iterator which will yield tuples containing each of the items in the original iterable along with a number, starting at 0 by default
+          - You can think of the `enumerate` function as *equivalent* to this generator function
+          - `enumerate` is a very useful tool, but it has a very simple implementation
+        </aside>
+      </section>
+
+      <section>
+        <table class="no-style">
+          <thead>
+            <tr><th></th><th class="fragment" data-fragment-index=3>Accepts an iterator</th><th class="fragment" data-fragment-index=5>Returns an iterator</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="fragment" data-fragment-index=1>enumerate</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=5>Yes</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>reversed</td><td class="fragment" data-fragment-index=4>No</td><td class="fragment" data-fragment-index=5>Yes</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>zip</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=5>Yes</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>filter</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=5>Yes</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>map</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=5>Yes</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>any</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=6>No</td></tr>
+            <tr><td class="fragment" data-fragment-index=2>all</td><td class="fragment" data-fragment-index=3>Yes</td><td class="fragment" data-fragment-index=6>No</td></tr>
+          </tbody>
+        </table>
+        <aside class="notes" data-markdown>
+          - Who has used Python's `zip` function?
+          - `zip` is a function which takes any number of iterables and returns an iterator which yields tuples of each of the corresponding items in the given iterables
+          - It's basically like looping over multiple iterables at the same time
+          - You can think of `zip` as equivalent to *this* generator function
+        </aside>
+      </section>
+
+      <section>
+        <h3>itertools</h3>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> from itertools import islice
+>>> <span class="fragment">squares = (n**2 for n in range(1_000_000))
+>>> </span><span class="fragment">list(islice(squares, 9))
+</span><span class="fragment">[4, 9, 16, 25, 36, 49, 64, 81, 100]</span>
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+def islice(iterable, stop):
+    for i, item in enumerate(iterable):
+        if i == stop:
+            return
+        yield item
+    <span class="fragment"># There's a bit more to islice than this</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show table of some helpful itertools functions: zip_longest, takewhile, chain.from_iterable, cycle
+          - TODO transitions and clicks
+          - The `first_n` function we wrote is a subset of the `islice` function, which can do the same thing
+        </aside>
+      </section>
+
+      <section>
+        <h3>boltons<span class="fragment">.iterutils</span></h3>
+        <aside class="notes" data-markdown>
+          - TODO instead of showing by_paragraph and around here, just show examples of chunked_iter (looping over a file 3 lines at a time) and split_iter (looping  over a file paragraph-by-paragraph).
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+from boltons.iterutils import chunked_iter
+
+with open('logs.txt') as log_file:
+    for lines in chunked_iter(log_file, 100):
+        print(*lines, sep='')
+        input("Hit Enter to see the next 100 lines...\n")
+        </code></pre>
+        <!--
+        <pre class="python fragment"><code data-trim data-noescape>
+from itertools import count
+from boltons.iterutils import chunked_iter
+
+with open('logs.txt') as log_file:
+    for n, lines in zip(count(start=101, step=100), chunked_iter(log_file, 100)):
+        print(*lines, sep='')
+        input(f"Hit Enter to see lines {n} to {n+99}...\n")
+        </code></pre>
+        -->
+        <aside class="notes" data-markdown>
+          - TODO show chunked_iter
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+def by_paragraph(lines):
+    """Yield each paragraph (lines separated by blank lines)."""
+    paragraph = ""
+    for line in lines:
+        if line == '\n':
+            yield paragraph
+            paragraph = ""
+        else:
+            paragraph += line
+    yield paragraph
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+from boltons.iterutils import split_iter
+
+def by_paragraph(lines):
+    """Yield each paragraph (lines separated by blank lines)."""
+    for lines in split_iter(lines, sep=('\n', '')):
+        yield "".join(lines)
+
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show split_iter better...
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = None
+    for after in iterable:
+        if current is not None:
+            yield (before, current, after)
+        before, current = current, after
+    if current is not None:
+        yield (before, current, None)
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+from itertools import chain
+from boltons.iterutils import windowed_iter
+
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    return windowed_iter(chain([None], iterable, [None]), size=3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Problem 1: Revisited</h2>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    <span class="fragment bold-current" data-fragment-index=3>prev = line = None</span>
+    <span class="fragment bold-current" data-fragment-index=2>for next in log_file:</span>
+        <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=4>next = next.rstrip('\n')</span></span>
+        <span class="fragment bold-current" data-fragment-index=5>if line and 'error' in line.lower():</span>
+            <span class="fragment bold-current" data-fragment-index=7>print(prev, line, next, sep='\n')</span>
+        <span class="fragment bold-current" data-fragment-index=3>prev, line = line, next</span><span class="fragment bold-current" data-fragment-index=9></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - We could *wrap* it in *another* iterator
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+def strip_newlines(lines):
+    for line in lines:
+        yield line.rstrip('\n')
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    <span class="fragment bold-current" data-fragment-index=4>prev = line = None</span>
+    for <span class="fragment bold-current" data-fragment-index=4>next</span> in <span class="fragment bold-current" data-fragment-index=3>strip_newlines(log_file)</span>:
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        <span class="fragment bold-current" data-fragment-index=4>prev, line = line, next</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = None
+    for after in iterable:
+        if current is not None:
+            yield (before, current, after)
+        before, current = current, after
+    if current is not None:
+        yield (before, current, None)
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    for prev, line, next in around(strip_newlines(log_file)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO bolds and note edge case (last line having an error) that we weren't actually taking into account before
+          - TODO Python doesn't care if our log file is 10 lines or 10 million lines: this code will work the same way in either case
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = None
+    for after in iterable:
+        if current is not None:
+            yield (before, current, after)
+        before, current = current, after
+    <span class="fragment bold-current">if current is not None:
+        yield (before, current, None)</span>
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = None
+    for next in strip_newlines(log_file):
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    <span class="fragment">if line and 'error' in line.lower():
+        print(prev, line, None, sep='\n')</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = None
+    for next in log_file:
+        next = next.rstrip('\n')
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    <span class="fragment" data-fragment-index=2>if line and 'error' in line.lower():
+        print(prev, line, None, sep='\n')</span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    for prev, line, next in <span class="fragment bold-current" data-fragment-index=7>around</span>(<span class="fragment bold-current" data-fragment-index=6>strip_newlines</span>(<span class="fragment bold-current" data-fragment-index=5>log_file</span>)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre><span class="fragment" data-fragment-index=8></span>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python" data-fragment-index=3><code data-trim data-noescape>
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = None
+    for after in iterable:
+        if current is not None:
+            yield (before, current, after)
+        before, current = current, after
+    if current is not None:
+        yield (before, current, None)
+
+def strip_newlines(lines):
+    for line in lines:
+        yield line.rstrip('\n')
+
+with open('logs.txt') as log_file:
+    for prev, line, next in around(strip_newlines(log_file)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Problem 2: Revisited</h2>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+from datetime import date, timedelta
+
+
+yesterday = date.today() - timedelta(1)
+
+with open('log.txt') as log_file:
+    i = 0
+    for line in log_file:
+        if str(yesterday) in line and 'error' in line.lower():
+            i += 1
+
+            if i &lt;= 10:
+                print(line, end='')
+
+            else:
+                print('[...]')
+                break
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO you can see we're counting upward as we work with lines... often you can use enumerate to count upward for you as you process lines. But we can't do that here because we only care about a some of the lines... the ones which match a this condition
+          - TODO if we could make a lazy iterable out of *just* those lines, we could reach for `enumerate` to count for us
+          - TODO we could do that by taking our iteration  line and our filtering condition and making a generator expression representing *only* the lines we care about
+          - TODO and now we can write the same code but, using enumerate to count for us
+          - TODO we can also simplify our logic that checks whether we have more than 10 lines by instead breaking at the 10th line and checking whether there was one more or not
+          - TODO you might notice this looping and counting bit matches a pattern we've seen... we're using enumerate because we're trying to get the *first 10* lines only: we could use `islice` for that
+          - TODO now you might not find all these iteration helpers useful... you can definitely go overboard and make your code *less* readable than what you started with.  But this is a *choice* you have: how much do you want to reimplement the wheel yourself and how much do you want to delegate to helper functions that do little bits of work for us
+        </aside>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+from datetime import date, timedelta
+
+
+yesterday = date.today() - timedelta(1)
+
+with open('log.txt') as log_file:
+    <span class="fragment" data-fragment-index=3>error_lines = (
+        line</span>
+        <span class="fragment" data-fragment-index=1>for line in log_file</span>
+        <span class="fragment" data-fragment-index=2>if str(yesterday) in line and 'error' in line.lower()</span>
+    <span class="fragment" data-fragment-index=3>)</span>
+    <span class="fragment" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=6>for i, line in enumerate(error_lines):
+        if i == 10:
+            break
+        print(line, end='')</span></span>
+    <span class="fragment" data-fragment-index=5>if next(error_lines, ''):
+        print('[...]')</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <pre class="python"><code data-trim data-noescape>
+from datetime import date, timedelta
+from itertools import islice
+
+yesterday = date.today() - timedelta(1)
+
+with open('log.txt') as log_file:
+    error_lines = (
+        line
+        for line in log_file
+        if str(yesterday) in line and 'error' in line.lower()
+    )
+
+    for line in islice(error_lines, 10):
+        print(line, end='')
+
+    if next(error_lines, ''):
+        print('[...]')
+
+
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+          - TODO a bit more wrap up after this?
+        </aside>
+      </section>
+
+
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <ul>
+          <li><strong class="fragment underline-current" data-fragment-index=4>Generator function</strong>: a syntax for easily creating iterators</li>
+          <li class="fragment" data-fragment-index=1><strong class="fragment underline-current" data-fragment-index=6>Generator object</strong> (aka <span class="fragment underline-current" data-fragment-index=2>generator</span>): an iterator created from a generator function (or a generator expression)</li>
+          <li class="fragment" data-fragment-index=3><strong class="fragment underline-current" data-fragment-index=5>Generator expression</strong>: comprehension which returns a generator instead of a list</li>
+          <li class="fragment" data-fragment-index=7><strong class="fragment underline-current" data-fragment-index=7>Iterator</strong>: lazy single-use iterable</li>
+          <span class="fragment" data-fragment-index=8></span>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO simplify this greatly!!!
+          - Instead show all three on the screen with their words above them (generator function example, generator expression example, generator object (aka "generator") which is the thing we get back from calling a generator function or evaluating a generator expression)
+          - Then apologize and note that the Python documentation calls these by different names, ones which I both disagree with and don't hear used quite as frequently by most Python programmers
+        </aside>
+      </section>
+
+      <section data-background="#ffffff">
+        <img src="generator-definitions.png" class="no-style">
+        <aside class="notes" data-markdown>
+          - TODO maybe talk about how when we have an object of type list I refer to that as "a list" and an object of type function I refer to as a "function"
+          - TODO Luciano in Fluent Python (page 429): "Calling a generator function returns a generator."
+        </aside>
+      </section>
+
+      <section>
+        <h2>Recap</h2>
+        <ul>
+          <li class="fragment">Iteration helpers can help <strong>break up large loops</strong> into smaller chunks</li>
+          <li class="fragment">Smaller loops can make your code <strong>more readable</strong> and <strong>more maintainable</strong></li>
+          <li class="fragment">Know how to use iteration helpers<span class="fragment">, where to find them</span><span class="fragment">, and how to make your own using generators</span></li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - Regardless of whether you're inventing your own iteration helpers or reaching for helpers written by others, using iteration helpers can really improve the readability of your code **(click)**
+          - It's similar to splitting one big function up into a couple little functions
+          - But instead we're using iterators generator functions to move *generic* logic outside of your loops, to make our loops cleaner and easier to understand
+          - This can make our code more descriptive and easier to understand **(click)**
+          - So learn how to *use* iteration helpers **(click)**
+          - ...where to *find* iteration helpers within Python itself and in third-party libraries **(click)**
+          - ...and how to write your own helpers with generator functions and generator expressions **(click)**
+
+          - TODO Maybe a table showing helpers and their use
+            - Using with_previous/with_next/window/pairwise-like helpers to remove “side cars”
+            - Using any/all instead of early break/return (is_prime)
+            - Using dropwhile/takewhile instead of early break (trim function)
+            - Using next instead of an early return/break
+            - Using islice instead of manual loop-and-append-and-break or manual next-ing
+          - Iterators allow for more descriptive code
+        </aside>
+      </section>
+
+      <section data-background-image="lazy-looping-tutorial.png" class="no-controls">
+        <div class="fragment" style="background: rgba(238, 238, 238, 0.9); ">
+        <h1>Lazy Looping in Python</h1>
+        <h3>Making and Using Generators and Iterators</h3>
+        </div>
+        <aside class="notes" data-markdown>
+          - And if you want to dive even deeper, I gave a 3 hour tutorial on lazy looping at PyCon this year
+        </aside>
+      </section>
+
+      <!--
+      <section>
+        <h2>Conclusion</h2>
+        <ul>
+          <li class="fragment">Iterables: objects which can provide iterators</li>
+          <li class="fragment">Iterators: objects which can give you their "next" item repeatedly</li>
+          <li class="fragment">Iterators allow for lazy iterables and lazy iteration</li>
+          <li class="fragment">Generators allow for an easy way to make your own lazy iterable</li>
+          <li class="fragment">Lazy iterables can allow us to write more descriptive code</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO XXX Conclusion
+          - Iterables give iterators and iterators give each item individually
+          - Iterators are the backbone of looping in Python
+          - Iterators also empower lazy iteration and working directly with iterators can allow you to write more flexible code
+          - Iterators allow you to write your code in a different way
+        </aside>
+      </section>
+      -->
+
+      <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
+        <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
+        <h3>
+          <strong>Trey Hunner</strong><br>
+          <small>Python &amp; Django Team Trainer</small>
+        </h3>
+        <p>
+          <small>
+            Contact me: <a href="mailto:&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;">&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;</a>
+          </small>
+        </p>
+        <p>
+        <a href="http://truthful.technology"><img src="logo.svg" class="no-style logo"></a>
+        <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
+        </p>
+          <p><small>
+            <a href="https://commons.wikimedia.org/wiki/File:Hand_tally_and_knitting_row_counter_007.jpg">Tally counter image &copy; Linda Spashett, CC BY</a><br>
+            <a href="https://www.flickr.com/photos/30223382@N06/4151828376">Hello Kitty PEZ image &copy; Deborah Austin, CC BY</a><br>
+          </small></p>
+        <aside class="notes" data-markdown>
+          - Thank you
+        </aside>
+      </section>
+
+      <!--
+      <section>
+
+      <section>
+        <h2>Problem 1</h2>
+        <aside class="notes" data-markdown>
+          - TODO
+            - need text anchors for title of what the problem does
+            - don't show all the possible solutions: show the starting ugly code and state what the problem is and that's it
+            - tell people not to hold any of these in their head
+            - we're not going to see this problems for a while because we have a lot to talk about first... so you can forget these problems
+            - TODO make a joke involving prequels and maybe Star Trek The Next Generation
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="no-highlight"><code class="hljs" data-trim>
+I'm Nobody! Who are you?
+Are you – Nobody – too?
+Then there's a pair of us!
+Don't tell! they'd advertise – you know!
+
+How dreary – to be – Somebody!
+How public – like a Frog –
+To tell one's name – the livelong June –
+To an admiring Bog!
+
+By Emily Dickinson (1891)
+        </code></pre>
+        <br>
+        <br>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <pre class="no-highlight"><code class="hljs" data-trim>
+<p>
+I'm Nobody! Who are you?
+Are you – Nobody – too?
+Then there's a pair of us!
+Don't tell! they'd advertise – you know!
+</p>
+<p>
+How dreary – to be – Somebody!
+How public – like a Frog –
+To tell one's name – the livelong June –
+To an admiring Bog!
+</p>
+<p>
+By Emily Dickinson (1891)
+</p>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim>
+with open('poem.txt') as text_file:
+    text = "<p>\n"
+    for line in text_file:
+        if line == '\n':
+            text += "</p>\n<p>\n"
+        else:
+            text += line
+    text += "</p>\n"
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim>
+with open('poem.txt') as text_file:
+    paragraphs = text_file.read().rstrip('\n').split('\n\n')
+    text = ""
+    for paragraph in paragraphs:
+        text += f"<p>\n{paragraph}\n</p>\n"
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+      -->
+
+
+      <!--
+      <section>
+
+      <section>
+        <h2>What can we do with lazy iterables?</h2>
+        <aside class="notes" data-markdown>
+          - TODO simplify this section
+          - Let's talk about working *with* iterators: what can you do with these things?
+          - We're going to make some tools that take lazy iterables and do something with them, usually that means returning new lazy iterables... but not always
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim>
+with open('license.txt') as f:
+    text = "<p>\n"
+    for line in f:
+        if line == '\n':
+            text += "</p>\n<p>\n"
+        else:
+            text += line
+    text += "</p>\n"
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - File objects are iterators
+          - When you loop over files you'll get each line in the file
+          - Python uses a small buffer as you loop to make reading files memory and time efficient
+          - This code reads reads a file line-by-line, groups the lines into paragraphs, and surrounding those paragraphs by HTML `<p>` tags
+          - There's a lot of logic here around splitting the text up into paragraphs
+          - It'd be nice if we could somehow wrap that logic up into a helper function, like this...
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <pre class="python"><code>with open('license.txt') as f:
+    text = ""
+    for paragraph in by_paragraph(f):
+        text += f"<p>\n{paragraph}</p>\n"
+    print(text, end='')
+
+
+
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Here we're imagining a `by_paragraph` function which accepts an iterable of lines (which is what file objects are), and returns an iterable we can loop over to get paragraphs instead
+          - You can think of `by_paragraph` as a sort of wrapper function: it wraps around a file and lazily gives us paragraphs from the file
+          - We could make `by_paragraph` with a generator function
+          - TODO show example that returns a list first... we understand that one... but *if* we learn about generators, we could turn this into a pretty readable generator function with just a few small changes
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def by_paragraph(lines):
+    paragraph = ""
+    for line in lines:
+        if line == '\n':
+            yield paragraph
+            paragraph = ""
+        else:
+            paragraph += line
+    yield paragraph
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This generator function loops line-by-line, joining the lines together, until an empty line is found... at which point the current paragraph is yielded and we start over with a new paragraph
+          - After we reach the end of the file, we yield the last paragraph we saw, since the file probably doesn't end with an empty line
+          - This is the same logic we had in our `for` loop before, but we've moved it into its own function to separate the paragraph chunking from the HTML `<p>` tag adding.
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim>
+with open('license.txt') as f:
+    text = ""
+    for paragraph in by_paragraph(f):
+        text += f"<p>\n{paragraph}</p>\n"
+
+    print(text, end='')
+        </code></pre>
+        <pre class="python fragment"><code data-trim>
+with open('license.txt') as f:
+    text = "".join(
+        f"<p>\n{paragraph}</p>\n"
+        for paragraph in by_paragraph(f)
+    )
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show removing extra parens on generator expressions here
+          - I find this `for` loop a lot more descriptive than that long loop we had before
+          - I also think this code might be more maintainable though
+          - For one thing, our loop is so short now that if we decided we don't want to concatenate to a string over and over, we could refactor this **(click)** to use a generator expression and the string `join` method instead
+          - And since we've separated paragraph-splitting logic into its own function, if we refactor it later to improve it, this loop doesn't even need to change
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim>
+def by_paragraph(lines):
+    """Yield each paragraph (lines separated by blank lines)."""
+    paragraph = ""
+    for line in lines:
+        if line == '\n':
+            yield paragraph
+            paragraph = ""
+        else:
+            paragraph += line
+    yield paragraph
+
+
+with open('license.txt') as f:
+    text = "".join(
+        f"<p>\n{paragraph}</p>\n"
+        for paragraph in by_paragraph(f)
+    )
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <pre class="python"><code data-trim>
+def by_paragraph(lines):
+    """Yield each paragraph (lines separated by blank lines)."""
+    paragraph = ""
+    for line in lines:
+        if line.rstrip('\n'):
+            paragraph += line
+        elif paragraph:
+            yield paragraph
+            paragraph = ""
+    if paragraph:
+        yield paragraph
+
+with open('license.txt') as f:
+    text = "".join(
+        f"<p>\n{paragraph}</p>\n"
+        for paragraph in by_paragraph(f)
+    )
+    print(text, end='')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+      -->
+
 
       <!--
       <section>
@@ -248,91 +1540,6 @@ with open('log.txt') as log_file:
         </aside>
       </section>
       -->
-
-      <section>
-        <h3 class="fragment" data-fragment-index=2>Files are iterators</h3>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment" data-fragment-index=1>my_file = open("my_file.txt")
->>> </span><span class="fragment">next(my_file)
-'This is line 1 of the file'
->>> </span><span class="fragment">next(my_file)
-'This is line 2 of the file'
->>> </span><span class="fragment">for line in my_file:
-...     print(line, end="")
-...
-</span><span class="fragment">This is line 3 of the file
-This is line 4 of the file
->>> </span><span class="fragment">list(my_file)</span><span class="fragment">
-[]</span>
-<!--
->>> words = ['one', 'two', 'three', 'four']
->>> z = zip(words, range(4))
->>> next(z)
-('one', 0)
->>> e = enumerate(words)
->>> next(e)
-(0, 'one')
->>> numbers = [2, 1, 3, 4, 7]
->>> next(z)
-('one', 2)
->>> next(z)
-('two', 1)
--->
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - I'm going to demonstrate how iterators work, with a file
-          - Because in Python, **file objects are iterators**
-          - We can do two things with an iterators:
-            - We can pass them to Python's built-in `next` function, which gives us the *next* in them
-            - ... with files that gives us the next line in the file
-            - The other thing we can do with any iterator: is loop over it: just like an other iterable
-          - But iterators are **lazy iterables**, which means they *consume* items as you loop over them
-          - So if you start getting items from them, either by calling `next` or by looping, and then you **stop**... the next time you *start* again, you'll be right where you left off
-          - And if you loop all the way through an iterator and then try to loop over it again... **it'll be empty**
-          - This iterator is **exhausted**: which means its job is done.
-          - Iterators only go in **one direction**: forwards... and they have no *memory* of what came before
-        </aside>
-      </section>
-
-      <section>
-        <h3>The rules of iterators</h3>
-        <ol>
-          <li class="fragment">Looping over an iterator "consumes" items from it</li>
-          <li class="fragment">The <code>next</code> function consumes just one item</li>
-        </ol>
-        <aside class="notes" data-markdown>
-          - There are two **rules** that indicate whether something is an iterator
-            1. When you loop over an iterator, you'll **consume** items from it
-            2. And if you pass it to the  `next` function, you'll consume just *one* from it
-          - Any iterable which is consumed as you loop over it is *almost certainly* an iterator and anything you can pass to the `next` function is *definitely* an iterator
-          - ...
-          - Because we consume items from iterators as we loop over them, you can think of iterators as like...
-        </aside>
-      </section>
-
-      <section data-background-image="hello-kitty-pez.jpg">
-        <aside class="notes" data-markdown>
-          - Hello Kitty PEZ dispensers.
-          - When you take a PEZ out, it's gone: you've **consumed** it
-          - And once the dispenser is empty, it's useless: there's no way to reload it
-          - TODO remove? Iterators are **lazy**, **single-use** iterables
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <h3>Lazy Looping</h3>
-        <ul>
-          <li class="fragment">looping over an iterator</li>
-          <li class="fragment">creating an iterator</li>
-        </ul>
-        <aside class="notes" data-markdown>
-          - TODO
-          - So when I the phrase "lazy looping" I'm either referring to:
-            - Looping over an iterator, which is a lazy iterable
-            - Or creating our own iterator
-            - Or even calling someone else's code that might pass an iterator back to us
-        </aside>
-      </section>
 
       <!--
       <section>
@@ -461,268 +1668,6 @@ with open("haystack.txt") as my_large_file:
       </section>
       -->
 
-      </section>
-
-      <!--
-      <section data-transition="slide-in fade-out">
-        <h2>Our Objective</h2>
-        <p class="fragment" data-fragment-index=1>
-        <span class="fragment fade-out" data-fragment-index=4>
-          Make more readable and efficient loops with "lazy looping"
-        </p>
-        <ol>
-          <li class="fragment" data-fragment-index=4>How to create our own iterators</li>
-          <li class="fragment" data-fragment-index=5>What to do with iterators once you have them</li>
-
-        <aside class="notes" data-markdown>
-          - TODO maybe show this before we do definitions and then revisit it after?
-          - Our objective is to **(click)** learn how to create lazy iterables...
-          - By making iterators **(click)**
-          - And to use these lazy iterables to make our looping code **(click)** more readable, more descriptive, and maybe even more efficient
-          - So we're going to talk about how to create our own iterators
-          - And what to do with iterators once we have them
-          - We're actually going to start by taking a look at that second thing real quick: what can we *do* with iterators once we have them?
-        </aside>
-      </section>
-      -->
-
-      <section>
-
-      <section>
-        <h2>How do you create iterators?</h2>
-        <aside class="notes" data-markdown>
-          - First: creating iterators.
-          <!--
-          - TODO So, how do you actually create iterators?
-          - TODO simplify this section:
-            - Skip straight to showing generator functions as a way to make a function which returns an iterator
-            - talk about generator expressions as a shorter form of generator functions, a way to make a lazy iterator without even making a whole new function
-            - show wrapping iterators around iterators to compose a lazy iteration pipeline of sorts
-          -->
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment">e = enumerate(['one', 'two', 'three', 'four'])
->>> </span><span class="fragment">next(e)
-(0, 'one')
->>> </span><span class="fragment">for thing in e:
-...     print(e)
-...</span>
-<span class="fragment">(1, 'two')</span>
-<span class="fragment">(2, 'three')</span>
-<span class="fragment">(3, 'four')
->>> </span><span class="fragment">for thing in e:
-...     print(e)
-...</span><span class="fragment">
->>></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Python's `enumerate` function gives us an iterator when we call it
-          - Which means we can call `next` on it, or we can loop over it
-          - And *as we loop over it*, it's *creating* two-item tuples that we're *consuming* from it
-          - And if we loop over it a second time: it'll be empty
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
-    <span class="fragment bold-current" data-fragment-index=1><span class="fragment fade-out" data-fragment-index=5>values = []</span></span>
-    for item in iterable:
-        <span class="fragment bold-current" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=6>values.append((n, item))</span></span>
-        n += 1
-    <span class="fragment bold-current" data-fragment-index=2><span class="fragment fade-out" data-fragment-index=4>return values</span></span><span class="fragment" data-fragment-index=3></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-          - this function acts sort of like the built-in `enumerate` function, except it's not *lazy*
-          - this function doesn't compute things as it goes... instead it builds up a list of tuples and then returns it to us
-          - We can make this function into an iterator, by actually *removing* code from it
-          - First we'll remove the `return` statement
-          - Then we'll remove the empty `values` list
-          - Then that `append` call... it's going to turn into **a `yield` statement**
-        </aside>
-      </section>
-
-      <section data-transition="fade-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
-
-    for item in iterable:
-        yield (n, item)
-        n += 1<span>
-
-</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - **This** acts just like the built-in `enumerate` function: when we call it, we'll 
-        </aside>
-      </section>
-
-      <section data-transition="fade-in slide-out">
-        <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
-    for item in iterable:
-        <span class="fragment bold-current" data-fragment-index=5>yield (n, item)</span>
-        n += 1
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
->>> e = enumerate(['one', 'two', 'three', 'four'])
->>> <span class="fragment" data-fragment-index=2>next(e)
-(0, 'one')
->>> </span><span class="fragment" data-fragment-index=3>list(e)
-[(1, 'two'), (2, 'three'), (3, 'four')]
->>> </span><span class="fragment" data-fragment-index=4>list(e)
-[]</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-          - That `yield` statement turned our function into a **generator function**
-        </aside>
-      </section>
-
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> TODO show enumerate here and say we want to make a function that counts downward instead
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
-def etaremune(iterable, start=0):
-    n = start
-    values = []
-    for item in iterable:
-        values.append((n, item))
-        n -= 1
-    return values
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
-def etaremune(iterable, start=0):
-    n = start
-
-    for item in iterable:
-        yield (n, item)
-        n -= 1
-
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO show function that does the opposite of enumerate but note that it's not lazy... when you call it, it immediately makes a whole list of all the items in the iterable you give it
-          - TODO we can turn this into an iterator by actually *removing* code from function
-          - TODO move generator function example to next slide
-        </aside>
-      </section>
-      -->
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-<span class="fragment" data-fragment-index=1>def gimme_five():
-    print('Start!')
-    return 5
-</span>
-<span class="fragment" data-fragment-index=8>def enumerate(iterable, start=0):
-    print('Start?')
-    n = 1
-    for item in iterable:
-        <span class="fragment bold-current" data-fragment-index=13>yield (n, item)</span>
-        n += 1
-</span>
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment" data-fragment-index=3>x = gimme_five()</span>
-<span class="fragment" data-fragment-index=4>Start!
->>> </span><span class="fragment" data-fragment-index=5>x
-</span><span class="fragment" data-fragment-index=6>5
->>> </span><span class="fragment" data-fragment-index=9>y = enumerate(["purple", "blue", "pink"])</span><span class="fragment" data-fragment-index=10>
->>> </span><span class="fragment" data-fragment-index=11>y
-</span><span class="fragment" data-fragment-index=12>&lt;generator object enumerate at 0x7febbdeaae58></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO use enumerate instead of count_up?
-          - TODO clicks
-          - generator functions, functions, and classes are all "callables" meaning we can use parenthesis to call them and get something back
-          - when we call a function, we get whatever it returns passed back to us
-          - when we call a class, we get an instance of that class returned to us
-          - When we call a generator function it gives us a generator object. And generator objects are iterators: they are lazy iterables.
-          - TODO functions and generator functions are completely different animals.
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    <span class="fragment bold-current" data-fragment-index=1>print('start!')</span>
-    n = start
-    <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=19>for item in iterable</span>:
-        <span class="fragment bold-current" data-fragment-index=1>print('about to yield')</span></span>
-        <span class="fragment bold-current" data-fragment-index=12><span class="fragment bold-current" data-fragment-index=3>yield (n, item)</span></span>
-        <span class="fragment bold-current" data-fragment-index=17><span class="fragment bold-current" data-fragment-index=8>print('incrementing!')</span></span>
-        n += 1
-    <span class="fragment bold-current" data-fragment-index=20>print('all done!')</span>
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment" data-fragment-index=0>for <span class="fragment bold-current" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=13>n, color</span></span> in <span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=7>enumerate(["purple", "pink"])</span></span>:
-...     <span class="fragment bold-current" data-fragment-index=14><span class="fragment bold-current" data-fragment-index=5>print(f"Color {n} is {color}")</span></span>
-...</span>
-<span class="fragment" data-fragment-index=2>start!
-about to yield</span>
-<span class="fragment" data-fragment-index=6>Color 0 is purple</span>
-<span class="fragment" data-fragment-index=9>incrementing</span>
-<span class="fragment" data-fragment-index=11>about to yield</span>
-<span class="fragment" data-fragment-index=15>Color 1 is pink</span>
-<span class="fragment" data-fragment-index=18>incrementing</span>
-<span class="fragment" data-fragment-index=21>all done!</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO demonstrate looping over generator function executing code (both calling the print function and passing items back to us with `yield`)
-          - TODO use enumerate instead of count_up?
-          - Generator functions look very similar to regular Python functions, but they're *not* actually functions... at least not like other functions you're used to
-          - That `yield` statement **(click)** turns what would have been a normal Python function into a completely different animal
-          - When we call a **function** it executes the body of that function and gives us its return value
-          - **(click)** When we call a **generator function** **(click)**, it returns a new generator object to us. **(click)**
-          - Generators *are* iterators
-          - Which means if want to get data out of a generator, we can either call `next` on it **(click)**
-          - Or we can loop over it **(click)**
-          - And like other iterators, this iterable will be exhausted **(click)** once we've fully looped over it
-          - And if we ask this generator for an iterator, **(click)** it'll give us itself back
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> numbers = [2, 1, 3, 4, 7, 11]
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def square_all(numbers):
-    for n in numbers:
-        yield n**2
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> squares = (n**2 for n in numbers)
->>> <span class="fragment">squares_list = [n**2 for n in numbers]
->>> </span><span class="fragment">squares_list
-</span><span class="fragment">[4, 1, 9, 16, 49, 121]
->>> </span><span class="fragment">squares</span><span class="fragment">
-&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - This is a generator expression.  It looks like a list comprehension, but it doesn't return a list to us: it returns a generator.
-          - This... is equivalent ... **(click)** to this
-          - Generator expressions are not necessarily shorter than generator functions, but you can inline them into other code, just like you can inline list comprehensions
-          - So instead of making a whole function just to make a lazy iterable, **(click)** you can write a single expression
-          - I do want to note that this example of counting from 1 to 10 is silly and it's very contrived... we're going to look at a couple more realistic examples in a bit
-          - But first... let's talk about all these fancy words I've been using
-          - TODO highlight things while saying:
-            -  Generator functions and generator expressions are a special syntax for creating iterators in Python. 
-            - this is a generator function (because of that yield statement) and this is a generator expression
-            - calling a generator function or evaluating a generator expression will give you a generator object: which is an iterator, which is a lazy single-use iterable
-        </aside>
-      </section>
-
       <!--
       <section>
         <pre class="python"><code data-trim data-noescape>
@@ -759,6 +1704,60 @@ class CountUpIterator:
             - Generators give output each time they `yield`, but they don't exit
             - ... they basically put themselves *on pause* until the next time you ask them for another item and then they'll keep executing until they either yield again or return
             - You can think of this as sort of *dance* between the generator and the `for` loop that's iterating over it
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section data-transition="slide-in fade-out">
+        <h2>Our Objective</h2>
+        <p class="fragment" data-fragment-index=1>
+        <span class="fragment fade-out" data-fragment-index=4>
+          Make more readable and efficient loops with "lazy looping"
+        </p>
+        <ol>
+          <li class="fragment" data-fragment-index=4>How to create our own iterators</li>
+          <li class="fragment" data-fragment-index=5>What to do with iterators once you have them</li>
+
+        <aside class="notes" data-markdown>
+          - TODO maybe show this before we do definitions and then revisit it after?
+          - Our objective is to **(click)** learn how to create lazy iterables...
+          - By making iterators **(click)**
+          - And to use these lazy iterables to make our looping code **(click)** more readable, more descriptive, and maybe even more efficient
+          - So we're going to talk about how to create our own iterators
+          - And what to do with iterators once we have them
+          - We're actually going to start by taking a look at that second thing real quick: what can we *do* with iterators once we have them?
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> TODO show enumerate here and say we want to make a function that counts downward instead
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+def etaremune(iterable, start=0):
+    n = start
+    values = []
+    for item in iterable:
+        values.append((n, item))
+        n -= 1
+    return values
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+def etaremune(iterable, start=0):
+    n = start
+
+    for item in iterable:
+        yield (n, item)
+        n -= 1
+
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show function that does the opposite of enumerate but note that it's not lazy... when you call it, it immediately makes a whole list of all the items in the iterable you give it
+          - TODO we can turn this into an iterator by actually *removing* code from function
+          - TODO move generator function example to next slide
         </aside>
       </section>
       -->
@@ -837,78 +1836,19 @@ StopIteration</span>
       </section>
       -->
 
-      </section>
-
+      <!--
       <section>
-
-      <section>
-        <h2>How are iterators used?</h2>
-        <aside class="notes" data-markdown>
-          - TODO
-          - We already know that we can loop over iterators to get the things within them... we can do that manually with a `for` loop or we can delegate to some other function
-          - The really interesting part of iterators is that you can kind of *wrap* iterators *around* other iterators
-          - So imagining we *have* an iterator already: maybe it's a file object, maybe it's something else... what can we *do* with it?
-          - There are pretty much just two things you can do with iterators:
-            - You can loop over them
-            - Or you can wrap another iterator around them
-          - Both of these things can be done either manually (by us) or by delegating to some function that'll do these things for us
-          - For example...
-          - TODO the final step of working with an iterator is looping over it, because once you've looped over them they're exhausted
-        </aside>
-      </section>
-
-      <section>
-        <h3>Looping over iterators</h3>
-        <pre class="python fragment"><code data-trim data-noescape>
-squares = (n**2 for n in range(1000))
-<span class="fragment">total = 0
-for n in squares:
-    total += n</span>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['pink', 'blue', 'purple']
+>>> all(word.islower() for word in colors)
+True
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
-squares = (n**2 for n in range(1000))
-total = sum(squares)
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - The obvious thing to do with an iterator is loop over it
-          - We loop over it and do something with all the things inside it
-          - So if we have an iterator of squares of numbers
-          - We could write a `for` loop that loops over those squares and adds them
-          - Or we could delegate to some function that's going to do the looping and the adding for us, like the `sum` function that's built-in to Python
-          - However we do it, looping is really the last step of working with an iterator
-          - ... because once you loop over an iterator, it's exhausted: all the items in it have been consumed now, so it doesn't have any more use to us
-        </aside>
-      </section>
-
-      <section>
-        <h3 class="fragment fade-out" data-fragment-index=1>Wrapping iterators in iterators</h3>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    <span class="fragment bold-current" data-fragment-index=3>prev = line = None</span>
-    <span class="fragment bold-current" data-fragment-index=2>for next in log_file:</span>
-        <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=4>next = next.rstrip('\n')</span></span>
-        <span class="fragment bold-current" data-fragment-index=5>if line and 'error' in line.lower():</span>
-            <span class="fragment bold-current" data-fragment-index=7>print(prev, line, next, sep='\n')</span>
-        <span class="fragment bold-current" data-fragment-index=3>prev, line = line, next</span><span class="fragment bold-current" data-fragment-index=9></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-def strip_newlines(lines):
-    for line in lines:
-        yield line.rstrip('\n')
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    <span class="fragment bold-current" data-fragment-index=4>prev = line = None</span>
-    for <span class="fragment bold-current" data-fragment-index=4>next</span> in <span class="fragment bold-current" data-fragment-index=3>strip_newlines(log_file)</span>:
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        <span class="fragment bold-current" data-fragment-index=4>prev, line = line, next</span>
+def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
         </code></pre>
         <aside class="notes" data-markdown>
           - TODO
@@ -917,70 +1857,217 @@ with open('logs.txt') as log_file:
 
       <section>
         <pre class="python"><code data-trim data-noescape>
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    before = current = None
-    for after in iterable:
-        if current is not None:
-            yield (before, current, after)
-        before, current = current, after
-    if current is not None:
-        yield (before, current, None)
+def all_items_identical(iterable):
+    iterator = iter(iterable)
+    first = next(iterator)
+    <span class="fragment bold-current">for item in iterator:
+        if item != first:
+            return False
+    return True</span>
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    for prev, line, next in around(strip_newlines(log_file)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
+def all_items_identical(iterable):
+    iterator = iter(iterable)
+    first = next(iterator)
+    return all(v == first for v in iterable)
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO bolds and note edge case (last line having an error) that we weren't actually taking into account before
-          - TODO Python doesn't care if our log file is 10 lines or 10 million lines: this code will work the same way in either case
+          - TODO clicks
+          - The `all_items_identical` function we saw earlier had a `for` loop which would either `return True` if all items met a condition or it would `return False`
+          - We're looping over an iterable and ensuring each item meets a certain condition
+          - Anytime you see function based around a `for` loop with a condition check that returns `False` otherwise it returns `True`, you can replace it with a generator expression and the `all` function
         </aside>
       </section>
+      -->
 
+      <!--
       <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    prev = line = None
-    for next in log_file:
-        next = next.rstrip('\n')
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        prev, line = line, next
+        <pre class="python"><code data-trim data-noescape>
+def all_numbers(start=0):
+    n = start
+    while True:
+        yield n
+        n += 1
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    for prev, line, next in around(strip_newlines(log_file)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
+>>> from itertools import count
+>>> c = count()
+>>> [next(c) for c in range(7)]
+(0, 1, 2, 3, 4, 5, 6)
+>>> next(c), next(c), next(c), next(c), next(c), next(c), next(c)
+(7, 8, 9, 10, 11, 12, 13)
         </code></pre>
         <aside class="notes" data-markdown>
+          - TODO transitions and clicks
+          - The `all_numbers` generator we made does the same thing as the `itertools.count` utility
+        </aside>
+      </section>
+      -->
+
+			<!--
+      <section>
+        <h2>TODO</h2>
+        <ul>
+          <li class="fragment">TODO</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO itertools has lots of helpers, as do third-party libraries like more-itertools and boltons
+        </aside>
+      </section>
+			-->
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> 
+>>> numbers = [2, 1, 3, 4, 7, 11, 29]
+>>> for color in takewhile(str.islower, colors):
+...     print(color)
+...
+pink
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+def takewhile(predicate, iterable):
+    for item in iterable:
+        if not predicate(item):
+            break
+        yield item
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO ... what's a good example use for takewhile???
           - TODO
         </aside>
       </section>
 
       <section>
         <pre class="python"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    for prev, line, next in around(strip_newlines(log_file)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
+>>> 
+>>> numbers = [2, 1, 3, 4, 7, 11, 29]
+>>> for color in takewhile(str.islower, colors):
+...     print(color)
+...
+pink
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    errors_with_context = (
-        (prev, curr, next)
-        for prev, curr, next in around(strip_newlines(log_file))
-        if 'error' in curr.lower()
+def dropwhile(predicate, iterable):
+    iterator = iter(iterable)
+    for item in iterator:
+        if not predicate(item):
+            yield item
+            break
+    for item in iterator:
+        yield item
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO ... what's a good example use for takewhile???
+          - TODO
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> from math import sqrt
+>>> cubes = (n**3 for n in all_numbers())
+>>> square_cubes = (n for n in cubes if sqrt(n).is_integer())
+>>> </span><span class="fragment"><span class="fragment bold-current">list(square_cubes)</span><span class="fragment bold-current">[:10]</span>
+</span><span class="fragment">^CTraceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+  File "&lt;stdin>", line 1, in &lt;genexpr>
+KeyboardInterrupt
+>>> </span><span class="fragment">first_ten = first_n(<span class="fragment bold-current">square_cubes</span>, <span class="fragment bold-current">10</span>)<span class="fragment"></span></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO clean this up
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+def first_n(iterable, n):
+    iterator = iter(iterable)
+    for _ in range(n):
+        try:
+            yield next(iterator)
+        except StopIteration:
+            return 
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO clean this up
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <pre class="python"><code data-trim data-noescape>
+def first_n(iterable, n):
+
+    for i, item in enumerate(iterable):
+        if i == n:
+            return
+        yield item<span>
+        </span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO clean this up
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> from math import sqrt
+>>> cubes = (n**3 for n in all_numbers())
+>>> square_cubes = (n for n in cubes if sqrt(n).is_integer())
+>>> <span class="fragment">first_ten = first_n(square_cubes, 10)
+>>> </span><span class="fragment">first_ten
+&lt;generator object first_n at 0x7fdf38c55b88>
+>>> </span><span class="fragment">list(first_ten)</span>
+<span class="fragment">[0, 1, 64, 729, 4096, 15625, 46656, 117649, 262144, 531441]</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO clean this up
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section data-transition="fade-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+def concat(*iterables):
+    for iterable in iterables:
+        <span class="fragment bold">for element in iterable:
+          yield element
+
+        </span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Or we could make a generator function which does the same thing, yielding each element
+					- It's really common to have generators that loop over another iterable and yield out all of its values, unfiltered and unchanged
+          - It's so common, that there's a shortcut in Python for doing exactly that
+          - It's called `yield from`
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+from itertools import chain as concat
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+def concat(*iterables):
+    return (
+        element
+        for iterable in iterables
+        for element in iterable
     )
-    for prev, line, next in errors_with_context:
-        print(prev, line, next, sep='\n')
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO
+          - The `concat` function we made earlier is pretty much the same as the `itertools.chain` function
+          - TODO show the two being used in a REPL (or maybe in the code example we'll show concat for)
         </aside>
       </section>
+      -->
 
       <!--
       <section>
@@ -1026,164 +2113,6 @@ squares = (n**2 for n in my_iterator_of_numbers)
         </aside>
       </section>
       -->
-
-      <section>
-        <h2>What do you do with iterators?</h2>
-        <ol>
-          <li class="fragment">Wrap another iterator around them <span class="fragment">by
-              <ul>
-                <li>passing them to a generator function</li>
-                <li class="fragment">creating a generator expression</li>
-                <li class="fragment">calling another iterator-returning function</li>
-              </ul>
-          </li>
-          <li class="fragment">Loop over them<span class="fragment">, but only once</span>
-            <ul>
-              <li class="fragment">writing a <code>for</code> loop <span class="fragment">or a list comprehension</span></li>
-              <li class="fragment">calling another function that will do the looping</li>
-            </ul>
-          </li>
-        </ol>
-        <aside class="notes" data-markdown>
-          - TODO there are two general ways to do both of these things... manually or by delegation
-        </aside>
-      </section>
-
-      </section>
-
-      <section>
-
-      <section>
-        <h2>What can we do with lazy iterables?</h2>
-        <aside class="notes" data-markdown>
-          - TODO simplify this section
-          - Let's talk about working *with* iterators: what can you do with these things?
-          - We're going to make some tools that take lazy iterables and do something with them, usually that means returning new lazy iterables... but not always
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim>
-with open('license.txt') as f:
-    text = "<p>\n"
-    for line in f:
-        if line == '\n':
-            text += "</p>\n<p>\n"
-        else:
-            text += line
-    text += "</p>\n"
-    print(text, end='')
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - File objects are iterators
-          - When you loop over files you'll get each line in the file
-          - Python uses a small buffer as you loop to make reading files memory and time efficient
-          - This code reads reads a file line-by-line, groups the lines into paragraphs, and surrounding those paragraphs by HTML `<p>` tags
-          - There's a lot of logic here around splitting the text up into paragraphs
-          - It'd be nice if we could somehow wrap that logic up into a helper function, like this...
-        </aside>
-      </section>
-
-      <section data-transition="fade-in slide-out">
-        <pre class="python"><code>with open('license.txt') as f:
-    text = ""
-    for paragraph in by_paragraph(f):
-        text += f"<p>\n{paragraph}</p>\n"
-    print(text, end='')
-
-
-
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Here we're imagining a `by_paragraph` function which accepts an iterable of lines (which is what file objects are), and returns an iterable we can loop over to get paragraphs instead
-          - You can think of `by_paragraph` as a sort of wrapper function: it wraps around a file and lazily gives us paragraphs from the file
-          - We could make `by_paragraph` with a generator function
-          - TODO show example that returns a list first... we understand that one... but *if* we learn about generators, we could turn this into a pretty readable generator function with just a few small changes
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def by_paragraph(lines):
-    paragraph = ""
-    for line in lines:
-        if line == '\n':
-            yield paragraph
-            paragraph = ""
-        else:
-            paragraph += line
-    yield paragraph
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - This generator function loops line-by-line, joining the lines together, until an empty line is found... at which point the current paragraph is yielded and we start over with a new paragraph
-          - After we reach the end of the file, we yield the last paragraph we saw, since the file probably doesn't end with an empty line
-          - This is the same logic we had in our `for` loop before, but we've moved it into its own function to separate the paragraph chunking from the HTML `<p>` tag adding.
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim>
-with open('license.txt') as f:
-    text = ""
-    for paragraph in by_paragraph(f):
-        text += f"<p>\n{paragraph}</p>\n"
-
-    print(text, end='')
-        </code></pre>
-        <pre class="python fragment"><code data-trim>
-with open('license.txt') as f:
-    text = "".join(
-        f"<p>\n{paragraph}</p>\n"
-        for paragraph in by_paragraph(f)
-    )
-    print(text, end='')
-        </code></pre>
-
-        <aside class="notes" data-markdown>
-          - TODO show removing extra parens on generator expressions here
-          - I find this `for` loop a lot more descriptive than that long loop we had before
-          - I also think this code might be more maintainable though
-          - For one thing, our loop is so short now that if we decided we don't want to concatenate to a string over and over, we could refactor this **(click)** to use a generator expression and the string `join` method instead
-          - And since we've separated paragraph-splitting logic into its own function, if we refactor it later to improve it, this loop doesn't even need to change
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-def by_paragraph(lines):
-    paragraph = ""
-    for line in lines:
-        if line == '\n':
-            yield paragraph
-            paragraph = ""
-        else:
-            paragraph += line
-
-    yield paragraph
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - For example you might notice that if we passed a file to this function that had empty lines at the beginning or the end or had just one extra empty line between some paragraphs, we'll get strange output
-          - We could fix these issues with some extra logic that checks for empty paragraphs
-        </aside>
-      </section>
-
-      <section data-transition="fade-in slide-out">
-        <pre class="python"><code data-trim data-noescape>
-def by_paragraph(lines):
-    paragraph = ""
-    for line in lines:
-        if line.rstrip('\n'):
-            paragraph += line
-        elif paragraph:
-            yield paragraph
-            paragraph = ""
-    if paragraph:
-        yield paragraph
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
 
       <!--
       <section data-transition="slide-in fade-out">
@@ -1364,664 +2293,6 @@ TypeError: can only concatenate list (not "tuple") to list
       </section>
       -->
 
-      </section>
-
-      <section>
-
-      <section>
-        <h2>Iterator-wrapping functions in Python</h2>
-        <aside class="notes" data-markdown>
-          - TODO maybe put this after the by_paragraphs thing and then show other implementations, both easy and hard and talk about how we can make our own lazy iteration helpers by either mashing other ones together or writing a generator function ourselves
-          - TODO show more definitions/equivalent functions
-            - map and filter
-            - takewhile
-            - dropwhile
-            - count
-          - TODO other interesting helpers you could invent
-            - first_match (next on a generator expression)
-            - deep_flatten
-            - all_equal
-            - Example with Django queryset iterator (Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
-          - TODO show classical example of a generator function with `fib`
-          - Making our own iteration helpers is useful, but there are lots that are already built-in to Python
-          - And of course the best code is code that you don't have to write at all
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> colors = ['pink', 'blue', 'purple']
->>> for n, color in enumerate(colors, start=1):
-...     print(n, color)
-...
-1 pink
-2 blue
-3 purple
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
-    for element in iterable:
-        yield n, element
-        n += 1
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Who has used Python's enumerate function?
-          - `enumerate` is a function which takes an iterable and returns an iterator which will yield tuples containing each of the items in the original iterable along with a number, starting at 0 by default
-          - You can think of the `enumerate` function as *equivalent* to this generator function
-          - `enumerate` is a very useful tool, but it has a very simple implementation
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> colors = ['Blue', 'pink', 'PURPLE']
->>> for color in <span class="fragment bold" data-fragment-index=4>map(str.lower, colors):</span>
-...     print(color)
-...
-blue
-pink
-purple
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-def map(function, iterable):
-    for item in iterable:
-        yield function(item)
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
-def map(function, iterable):
-    return <span class="fragment bold" data-fragment-index=3>(function(x) for x in iterable)</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> colors = ['Blue', 'pink', 'PURPLE']
->>> for color in <span class="fragment bold" data-fragment-index=4>filter(str.islower, colors)</span>:
-...     print(color)
-...
-pink
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-def filter(predicate, iterable):
-    for item in iterable:
-        if predicate(item):
-            yield item
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
-def filter(predicate, iterable):
-    return <span class="fragment bold" data-fragment-index=3>(x for x in iterable if predicate(x))</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> from itertools import islice
->>> <span class="fragment">squares = (n**2 for n in range(1_000_000))
->>> </span><span class="fragment">list(islice(squares, 9))
-</span><span class="fragment">[4, 9, 16, 25, 36, 49, 64, 81, 100]</span>
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def islice(iterable, stop):
-    for i, item in enumerate(iterable):
-        if i == stop:
-            return
-        yield item
-    <span class="fragment"># There's a bit more to islice than this</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO transitions and clicks
-          - The `first_n` function we wrote is a subset of the `islice` function, which can do the same thing
-        </aside>
-      </section>
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> 
->>> numbers = [2, 1, 3, 4, 7, 11, 29]
->>> for color in takewhile(str.islower, colors):
-...     print(color)
-...
-pink
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def takewhile(predicate, iterable):
-    for item in iterable:
-        if not predicate(item):
-            break
-        yield item
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO ... what's a good example use for takewhile???
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> 
->>> numbers = [2, 1, 3, 4, 7, 11, 29]
->>> for color in takewhile(str.islower, colors):
-...     print(color)
-...
-pink
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def dropwhile(predicate, iterable):
-    iterator = iter(iterable)
-    for item in iterator:
-        if not predicate(item):
-            yield item
-            break
-    for item in iterator:
-        yield item
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO ... what's a good example use for takewhile???
-          - TODO
-        </aside>
-      </section>
-      -->
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> from math import sqrt
->>> cubes = (n**3 for n in all_numbers())
->>> square_cubes = (n for n in cubes if sqrt(n).is_integer())
->>> </span><span class="fragment"><span class="fragment bold-current">list(square_cubes)</span><span class="fragment bold-current">[:10]</span>
-</span><span class="fragment">^CTraceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-  File "&lt;stdin>", line 1, in &lt;genexpr>
-KeyboardInterrupt
->>> </span><span class="fragment">first_ten = first_n(<span class="fragment bold-current">square_cubes</span>, <span class="fragment bold-current">10</span>)<span class="fragment"></span></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO clean this up
-        </aside>
-      </section>
-      -->
-
-      <!--
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-def first_n(iterable, n):
-    iterator = iter(iterable)
-    for _ in range(n):
-        try:
-            yield next(iterator)
-        except StopIteration:
-            return 
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO clean this up
-        </aside>
-      </section>
-
-      <section data-transition="fade-in slide-out">
-        <pre class="python"><code data-trim data-noescape>
-def first_n(iterable, n):
-
-    for i, item in enumerate(iterable):
-        if i == n:
-            return
-        yield item<span>
-        </span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO clean this up
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> from math import sqrt
->>> cubes = (n**3 for n in all_numbers())
->>> square_cubes = (n for n in cubes if sqrt(n).is_integer())
->>> <span class="fragment">first_ten = first_n(square_cubes, 10)
->>> </span><span class="fragment">first_ten
-&lt;generator object first_n at 0x7fdf38c55b88>
->>> </span><span class="fragment">list(first_ten)</span>
-<span class="fragment">[0, 1, 64, 729, 4096, 15625, 46656, 117649, 262144, 531441]</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO clean this up
-        </aside>
-      </section>
-      -->
-
-      <!--
-      <section data-transition="fade-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-def concat(*iterables):
-    for iterable in iterables:
-        <span class="fragment bold">for element in iterable:
-          yield element
-
-        </span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Or we could make a generator function which does the same thing, yielding each element
-					- It's really common to have generators that loop over another iterable and yield out all of its values, unfiltered and unchanged
-          - It's so common, that there's a shortcut in Python for doing exactly that
-          - It's called `yield from`
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-from itertools import chain as concat
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
-def concat(*iterables):
-    return (
-        element
-        for iterable in iterables
-        for element in iterable
-    )
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - The `concat` function we made earlier is pretty much the same as the `itertools.chain` function
-          - TODO show the two being used in a REPL (or maybe in the code example we'll show concat for)
-        </aside>
-      </section>
-      -->
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> numbers = [2, 1, 3, 4, 7, 11]
->>> letters = 'abcdef'
->>> list(zip(numbers, letters))
-[(2, 'a'), (1, 'b'), (3, 'c'), (4, 'd'), (7, 'e'), (11, 'f')]
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def zip(*iterables):
-    iterators = [iter(it) for it in iterables]
-    while iterators:
-        values = []
-        for iterator in iterators:
-            try:
-                values.append(next(iterator))
-            except StopIteration:
-                return
-        yield tuple(values)
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Who has used Python's `zip` function?
-          - `zip` is a function which takes any number of iterables and returns an iterator which yields tuples of each of the corresponding items in the given iterables
-          - It's basically like looping over multiple iterables at the same time
-          - You can think of `zip` as equivalent to *this* generator function
-        </aside>
-      </section>
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
->>> colors = ['pink', 'blue', 'purple']
->>> all(word.islower() for word in colors)
-True
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def all(iterable):
-    for element in iterable:
-        if not element:
-            return False
-    return True
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def all_items_identical(iterable):
-    iterator = iter(iterable)
-    first = next(iterator)
-    <span class="fragment bold-current">for item in iterator:
-        if item != first:
-            return False
-    return True</span>
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def all_items_identical(iterable):
-    iterator = iter(iterable)
-    first = next(iterator)
-    return all(v == first for v in iterable)
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO clicks
-          - The `all_items_identical` function we saw earlier had a `for` loop which would either `return True` if all items met a condition or it would `return False`
-          - We're looping over an iterable and ensuring each item meets a certain condition
-          - Anytime you see function based around a `for` loop with a condition check that returns `False` otherwise it returns `True`, you can replace it with a generator expression and the `all` function
-        </aside>
-      </section>
-      -->
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def all_numbers(start=0):
-    n = start
-    while True:
-        yield n
-        n += 1
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> from itertools import count
->>> c = count()
->>> [next(c) for c in range(7)]
-(0, 1, 2, 3, 4, 5, 6)
->>> next(c), next(c), next(c), next(c), next(c), next(c), next(c)
-(7, 8, 9, 10, 11, 12, 13)
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO transitions and clicks
-          - The `all_numbers` generator we made does the same thing as the `itertools.count` utility
-        </aside>
-      </section>
-      -->
-
-			<!--
-      <section>
-        <h2>TODO</h2>
-        <ul>
-          <li class="fragment">TODO</li>
-        </ul>
-        <aside class="notes" data-markdown>
-          - TODO itertools has lots of helpers, as do third-party libraries like more-itertools and boltons
-        </aside>
-      </section>
-			-->
-
-      </section>
-
-      <section>
-
-      <section>
-        <h2>The Problem: Revisited</h2>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section data-transition="slide-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-from datetime import date, timedelta
-
-
-yesterday = date.today() - timedelta(1)
-
-with open('log.txt') as log_file:
-    i = 0
-    for line in log_file:
-        if str(yesterday) in line and 'error' in line.lower():
-            i += 1
-
-            if i &lt;= 10:
-                print(line, end='')
-
-            else:
-                print('[...]')
-                break
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO you can see we're counting upward as we work with lines... often you can use enumerate to count upward for you as you process lines. But we can't do that here because we only care about a some of the lines... the ones which match a this condition
-          - TODO if we could make a lazy iterable out of *just* those lines, we could reach for `enumerate` to count for us
-          - TODO we could do that by taking our iteration  line and our filtering condition and making a generator expression representing *only* the lines we care about
-          - TODO and now we can write the same code but, using enumerate to count for us
-          - TODO we can also simplify our logic that checks whether we have more than 10 lines by instead breaking at the 10th line and checking whether there was one more or not
-          - TODO you might notice this looping and counting bit matches a pattern we've seen... we're using enumerate because we're trying to get the *first 10* lines only: we could use `islice` for that
-          - TODO now you might not find all these iteration helpers useful... you can definitely go overboard and make your code *less* readable than what you started with.  But this is a *choice* you have: how much do you want to reimplement the wheel yourself and how much do you want to delegate to helper functions that do little bits of work for us
-        </aside>
-      </section>
-
-      <section data-transition="fade-in fade-out">
-        <pre class="python"><code data-trim data-noescape>
-from datetime import date, timedelta
-
-
-yesterday = date.today() - timedelta(1)
-
-with open('log.txt') as log_file:
-    <span class="fragment" data-fragment-index=3>error_lines = (
-        line</span>
-        <span class="fragment" data-fragment-index=1>for line in log_file</span>
-        <span class="fragment" data-fragment-index=2>if str(yesterday) in line and 'error' in line.lower()</span>
-    <span class="fragment" data-fragment-index=3>)</span>
-    <span class="fragment" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=6>for i, line in enumerate(error_lines):
-        if i == 10:
-            break
-        print(line, end='')</span></span>
-    <span class="fragment" data-fragment-index=5>if next(error_lines, ''):
-        print('[...]')</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section data-transition="fade-in slide-out">
-        <pre class="python"><code data-trim data-noescape>
-from datetime import date, timedelta
-from itertools import islice
-
-yesterday = date.today() - timedelta(1)
-
-with open('log.txt') as log_file:
-    error_lines = (
-        line
-        for line in log_file
-        if str(yesterday) in line and 'error' in line.lower()
-    )
-
-    for line in islice(error_lines, 10):
-        print(line, end='')
-
-    if next(error_lines, ''):
-        print('[...]')
-
-
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-          - TODO a bit more wrap up after this?
-        </aside>
-      </section>
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def zip(*iterables):
-    # zip('ABCD', 'xy') -> Ax By
-    sentinel = object()
-    iterators = [iter(it) for it in iterables]
-    while iterators:
-        result = []
-        for it in iterators:
-            elem = next(it, sentinel)
-            if elem is sentinel:
-                return
-            result.append(elem)
-        yield tuple(result)
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def strict_zip(*iterables):
-    """zip function requiring iterables to have same length."""
-    done = 0
-    iters = [iter(it) for it in iterables]
-    while not done:
-        for iterator in iters:
-            try:
-                yield next(iterator)
-            except StopIteration:
-                done += 1
-    if done != len(iters):
-        raise ValueError(f"{len(iters)-done} iterables too long.")
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-from itertools import zip_longest
-
-def strict_zip(*iterables):
-    """zip function requiring iterables to have same length."""
-    sentinel = object()
-    for values in zip_longest(*iterables, fillvalue=sentinel):
-        if any(v is sentinel for v in values):
-            raise ValueError("Iterables must have the same length")
-        yield values
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-      -->
-
-      </section>
-
-      <!--
-      <section>
-        <aside class="notes" data-markdown>
-          - Django querysets re-evaluate when sliced... islice might be useful if you'd like to avoid this
-
-          - TODO how do Django's iterables and iterators work? (querysets)
-          - TODO querysets cache their results: the iterator method on Django querysets runs the query, provides an iterator over the items, and doesn't do any caching.  So iterator is what you want for large querysets.
-          - checking exists() and then using iterator() does a small query and then the bigger query... could instead use Python's built-in iteration tools to check for at least one item and then keep looping
-          - TODO Django queryset examples??... or something else since that could be inefficient?
-            - If you're doing a query that returns a million records, you might end up taking up over 1GB of system memory by if you let Django cache that query.
-        </aside>
-      </section>
-
-      <section>
-        <aside class="notes" data-markdown>
-          - not all lazy iterables are iterators
-          - For example: range objects are not iterators
-          - Try not to assume something is an iterator (or a non-iterator).  The most base assumption is that something is *an iterable*, meaning you can get an iterator from it.
-        </aside>
-      </section>
-      -->
-
-      <section data-transition="fade-in slide-out">
-        <ul>
-          <li><strong class="fragment underline-current" data-fragment-index=4>Generator function</strong>: a syntax for easily creating iterators</li>
-          <li class="fragment" data-fragment-index=1><strong class="fragment underline-current" data-fragment-index=6>Generator object</strong> (aka <span class="fragment underline-current" data-fragment-index=2>generator</span>): an iterator created from a generator function (or a generator expression)</li>
-          <li class="fragment" data-fragment-index=3><strong class="fragment underline-current" data-fragment-index=5>Generator expression</strong>: comprehension which returns a generator instead of a list</li>
-          <li class="fragment" data-fragment-index=7><strong class="fragment underline-current" data-fragment-index=7>Iterator</strong>: lazy single-use iterable</li>
-          <span class="fragment" data-fragment-index=8></span>
-        </ul>
-        <aside class="notes" data-markdown>
-          - TODO simplify this greatly!!!
-          - Instead show all three on the screen with their words above them (generator function example, generator expression example, generator object (aka "generator") which is the thing we get back from calling a generator function or evaluating a generator expression)
-          - Then apologize and note that the Python documentation calls these by different names, ones which I both disagree with and don't hear used quite as frequently by most Python programmers
-        </aside>
-      </section>
-
-      <section data-background="#ffffff">
-        <img src="generator-definitions.png" class="no-style">
-        <aside class="notes" data-markdown>
-          - TODO maybe talk about how when we have an object of type list I refer to that as "a list" and an object of type function I refer to as a "function"
-          - TODO Luciano in Fluent Python (page 429): "Calling a generator function returns a generator."
-        </aside>
-      </section>
-
-      <section>
-        <h2>Recap</h2>
-        <ul>
-          <li class="fragment">Iteration helpers can help <strong>break up large loops</strong> into smaller chunks</li>
-          <li class="fragment">Smaller loops can make your code <strong>more readable</strong> and <strong>more maintainable</strong></li>
-          <li class="fragment">Know how to use iteration helpers<span class="fragment">, where to find them</span><span class="fragment">, and how to make your own using generators</span></li>
-        </ul>
-        <aside class="notes" data-markdown>
-          - Regardless of whether you're inventing your own iteration helpers or reaching for helpers written by others, using iteration helpers can really improve the readability of your code **(click)**
-          - It's similar to splitting one big function up into a couple little functions
-          - But instead we're using iterators generator functions to move *generic* logic outside of your loops, to make our loops cleaner and easier to understand
-          - This can make our code more descriptive and easier to understand **(click)**
-          - So learn how to *use* iteration helpers **(click)**
-          - ...where to *find* iteration helpers within Python itself and in third-party libraries **(click)**
-          - ...and how to write your own helpers with generator functions and generator expressions **(click)**
-
-          - TODO Maybe a table showing helpers and their use
-            - Using with_previous/with_next/window/pairwise-like helpers to remove “side cars”
-            - Using any/all instead of early break/return (is_prime)
-            - Using dropwhile/takewhile instead of early break (trim function)
-            - Using next instead of an early return/break
-            - Using islice instead of manual loop-and-append-and-break or manual next-ing
-          - Iterators allow for more descriptive code
-        </aside>
-      </section>
-
-      <section data-background-image="lazy-looping-tutorial.png" class="no-controls">
-        <div class="fragment" style="background: rgba(238, 238, 238, 0.9); ">
-        <h1>Lazy Looping in Python</h1>
-        <h3>Making and Using Generators and Iterators</h3>
-        </div>
-        <aside class="notes" data-markdown>
-          - And if you want to dive even deeper, I gave a 3 hour tutorial on lazy looping at PyCon this year
-        </aside>
-      </section>
-
-      <!--
-      <section>
-        <h2>Conclusion</h2>
-        <ul>
-          <li class="fragment">Iterables: objects which can provide iterators</li>
-          <li class="fragment">Iterators: objects which can give you their "next" item repeatedly</li>
-          <li class="fragment">Iterators allow for lazy iterables and lazy iteration</li>
-          <li class="fragment">Generators allow for an easy way to make your own lazy iterable</li>
-          <li class="fragment">Lazy iterables can allow us to write more descriptive code</li>
-        </ul>
-        <aside class="notes" data-markdown>
-          - TODO XXX Conclusion
-          - Iterables give iterators and iterators give each item individually
-          - Iterators are the backbone of looping in Python
-          - Iterators also empower lazy iteration and working directly with iterators can allow you to write more flexible code
-          - Iterators allow you to write your code in a different way
-        </aside>
-      </section>
-      -->
-
-      <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
-        <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
-        <h3>
-          <strong>Trey Hunner</strong><br>
-          <small>Python &amp; Django Team Trainer</small>
-        </h3>
-        <p>
-          <small>
-            Contact me: <a href="mailto:&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;">&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;</a>
-          </small>
-        </p>
-        <p>
-        <a href="http://truthful.technology"><img src="logo.svg" class="no-style logo"></a>
-        <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
-        </p>
-          <p><small>
-            <a href="https://commons.wikimedia.org/wiki/File:Hand_tally_and_knitting_row_counter_007.jpg">Tally counter image &copy; Linda Spashett, CC BY</a><br>
-            <a href="https://www.flickr.com/photos/30223382@N06/4151828376">Hello Kitty PEZ image &copy; Deborah Austin, CC BY</a><br>
-          </small></p>
-        <aside class="notes" data-markdown>
-          - Thank you
-        </aside>
-      </section>
-
       <!--
       <section>
         <h2>Iterables use iterators for looping</h2>
@@ -2103,6 +2374,87 @@ def my_for_loop(iterable, action_to_do):
           - When you ask an iterator for an iterator it will give you itself back **(click)**, because it already *is* an iterator.  That's kind of clever and kind of weird, but that's how iterators work.
           - This means that you can think of iterators as lazy single-use iterables **(click)**: they compute their next item as you loop over them and when you stop looping over them and start up again you'll start where you left off
           - They're like
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def zip(*iterables):
+    # zip('ABCD', 'xy') -> Ax By
+    sentinel = object()
+    iterators = [iter(it) for it in iterables]
+    while iterators:
+        result = []
+        for it in iterators:
+            elem = next(it, sentinel)
+            if elem is sentinel:
+                return
+            result.append(elem)
+        yield tuple(result)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def strict_zip(*iterables):
+    """zip function requiring iterables to have same length."""
+    done = 0
+    iters = [iter(it) for it in iterables]
+    while not done:
+        for iterator in iters:
+            try:
+                yield next(iterator)
+            except StopIteration:
+                done += 1
+    if done != len(iters):
+        raise ValueError(f"{len(iters)-done} iterables too long.")
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+from itertools import zip_longest
+
+def strict_zip(*iterables):
+    """zip function requiring iterables to have same length."""
+    sentinel = object()
+    for values in zip_longest(*iterables, fillvalue=sentinel):
+        if any(v is sentinel for v in values):
+            raise ValueError("Iterables must have the same length")
+        yield values
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+      -->
+
+      <!--
+      <section>
+        <aside class="notes" data-markdown>
+          - Django querysets re-evaluate when sliced... islice might be useful if you'd like to avoid this
+
+          - TODO how do Django's iterables and iterators work? (querysets)
+          - TODO querysets cache their results: the iterator method on Django querysets runs the query, provides an iterator over the items, and doesn't do any caching.  So iterator is what you want for large querysets.
+          - checking exists() and then using iterator() does a small query and then the bigger query... could instead use Python's built-in iteration tools to check for at least one item and then keep looping
+          - TODO Django queryset examples??... or something else since that could be inefficient?
+            - If you're doing a query that returns a million records, you might end up taking up over 1GB of system memory by if you let Django cache that query.
+        </aside>
+      </section>
+
+      <section>
+        <aside class="notes" data-markdown>
+          - not all lazy iterables are iterators
+          - For example: range objects are not iterators
+          - Try not to assume something is an iterator (or a non-iterator).  The most base assumption is that something is *an iterable*, meaning you can get an iterator from it.
         </aside>
       </section>
       -->
@@ -2487,6 +2839,66 @@ def lstrip(iterable, value):
         </aside>
       </section>
       -->
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['Blue', 'pink', 'PURPLE']
+>>> for color in <span class="fragment bold" data-fragment-index=4>map(str.lower, colors):</span>
+...     print(color)
+...
+blue
+pink
+purple
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+def map(function, iterable):
+    for item in iterable:
+        yield function(item)
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
+def map(function, iterable):
+    return <span class="fragment bold" data-fragment-index=3>(function(x) for x in iterable)</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+lowercase_colors = (c.lower() for c in colors)
+<span class="fragment">lowercase_colors = map(str.lower, colors)</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['Blue', 'pink', 'PURPLE']
+>>> for color in <span class="fragment bold" data-fragment-index=4>filter(str.islower, colors)</span>:
+...     print(color)
+...
+pink
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+def filter(predicate, iterable):
+    for item in iterable:
+        if predicate(item):
+            yield item
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
+def filter(predicate, iterable):
+    return <span class="fragment bold" data-fragment-index=3>(x for x in iterable if predicate(x))</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+      -->
+
 
       <!--
       <section>
