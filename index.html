@@ -58,63 +58,17 @@
       <section>
 
       <section>
-        <h2>Problem 1</h2>
-        <h3 class="fragment">Find logged errors (with context)</h3>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    prev = line = None
-    for next in log_file:
-        next = next.rstrip('\n')
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        prev, line = line, next
-    if line and 'error' in line.lower():
-        print(prev, line, None, sep='\n')
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO explain this one and show an example
-        </aside>
-      </section>
-
-      <!--
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    lines = [
-        line.rstrip('\n')
-        for line in log_file
-    ]
-    for i, line in enumerate(lines):
-        prev = lines[i-1] if i > 0 else None
-        next = lines[i+1] if i+1 &lt; len(lines) else None
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO explain this one and show an example
-        </aside>
-      </section>
-      -->
-
-      </section>
-
-      <section>
-
-      <section>
-        <h2>Problem 2</h2>
+        <h2 class="fragment">Problem 1</h2>
         <h3 class="fragment">Find first 10 errors from yesterday</h3>
         <aside class="notes" data-markdown>
-          - TODO
+          - I'd like to start by *very briefly* looking at two blocks of code that are difficult to read
+          - I don't expect to remember or really even understand these blocks of code right now, but these are going to be our starting point
+          - So problem 1...
+          - We have some code that again looks for errors in a log file, but only the ones that happened yesterday and only the first 10 lines
         </aside>
       </section>
 
-      <section data-transition="slide-in fade-out">
+      <section>
         <pre class="python"><code data-trim data-noescape>
 from datetime import date, timedelta
 
@@ -129,14 +83,12 @@ with open('log.txt') as log_file:
                 print(line, end='')
             else:
                 print('[...]')
-                break<span>
-
-
-</span>
+                break
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO show output we're expecting first
-          - TODO
+          - This is our code
+          - We're looping over lines in our log file, checking for yesterday's date in them, and then we have a lot of logic around getting just the first 10
+          - If there were more than errors yesterday, we print out an ellipsis to signify that there's more but that we stopped after 10
         </aside>
       </section>
 
@@ -203,9 +155,63 @@ with open('log.txt') as log_file:
       <section>
 
       <section>
-        <h2 class="fragment current-visible" data-fragment-index=1>Lazy Looping</h2>
-        <h2><span class="fragment" data-fragment-index=4>What are </span><span class="fragment" data-fragment-index=2>iterables</span><span class="fragment" data-fragment-index=3> and iterators</span><span class="fragment" data-fragment-index=4>?</span></h2>
+        <h2 class="fragment">Problem 2</h2>
+        <h3 class="fragment">Find logged errors (with context)</h3>
         <aside class="notes" data-markdown>
+          - Problem 2...
+          - We have some code that finds lines in a log file that contain errors and then we print out the line itself and the two lines around it
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = None
+    for next in log_file:
+        next = next.rstrip('\n')
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    if line and 'error' in line.lower():
+        print(prev, line, None, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This is our code
+          - We're looping over lines in a log file, checking for errors, and then there's a lot of logic around keeping track of the previous line and the next line as we loop
+          - We're going to look at this later
+        </aside>
+      </section>
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    lines = [
+        line.rstrip('\n')
+        for line in log_file
+    ]
+    for i, line in enumerate(lines):
+        prev = lines[i-1] if i > 0 else None
+        next = lines[i+1] if i+1 &lt; len(lines) else None
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO explain this one and show an example
+        </aside>
+      </section>
+      -->
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2 class="fragment current-visible" data-fragment-index=1>Lazy Looping</h2>
+        <h3><span class="fragment" data-fragment-index=4>What are </span><span class="fragment" data-fragment-index=2>iterables</span><span class="fragment" data-fragment-index=3> and iterators</span><span class="fragment" data-fragment-index=4>?</span></h3>
+        <aside class="notes" data-markdown>
+          - You can completely forget about those for now...
+          - We're going to come back to those two problems at the end of this talk and refactor those code blocks, by using lazy looping
           - Lazy Looping is all about iterables and iterators
           - So the first thing we need to do is define what iterables and iterators are...
         </aside>
@@ -219,7 +225,6 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
     do_something_with(thing)
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO better speaker notes to fit what's on the slide
           - An iterable is **(click)** anything that you can loop over
           - lists, strings, tuples, dictionaries, files, and lots of other things things in Python are iterables
           - If you can write a `for` loop to iterate over some object it is, by definition, an iterable
@@ -233,7 +238,6 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
         <p class="fragment" data-fragment-index=3><span class="fragment strike" data-fragment-index=6>The thing that powers iterables</span></p>
         <p class="fragment" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=7>A special kind of "lazy" iterable</span></p>
         <aside class="notes" data-markdown>
-          - TODO redo the transitions and speaker notes here to better fit with previous slide
           - An iter-*ator* is a bit more complicated than an iter-*able*
           - ...
           - There are two definitons of iterators:
@@ -263,16 +267,16 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
         <h3 class="fragment" data-fragment-index=2>Files are iterators</h3>
         <pre class="python"><code data-trim data-noescape>
 >>> <span class="fragment" data-fragment-index=1>my_file = open("my_file.txt")
->>> </span><span class="fragment">next(my_file)
+>>> </span><span class="fragment" data-fragment-index=3>next(my_file)
 'This is line 1 of the file'
->>> </span><span class="fragment">next(my_file)
-'This is line 2 of the file'
->>> </span><span class="fragment">for line in my_file:
+>>> </span><span class="fragment" data-fragment-index=4>next(my_file)
+<span class="fragment bold-current" data-fragment-index=8>'This is line 2 of the file'</span>
+>>> </span><span class="fragment" data-fragment-index=5>for line in my_file:
 ...     print(line, end="")
 ...
-</span><span class="fragment">This is line 3 of the file
-This is line 4 of the file
->>> </span><span class="fragment">list(my_file)</span><span class="fragment">
+</span><span class="fragment" data-fragment-index=6><span class="fragment bold-current" data-fragment-index=7>This is line 3 of the file</span>
+This is line 4 (the end of the file)
+>>> </span><span class="fragment" data-fragment-index=9>list(my_file)</span><span class="fragment" data-fragment-index=10>
 []</span>
         </code></pre>
         <aside class="notes" data-markdown>
@@ -287,7 +291,6 @@ This is line 4 of the file
             - The other, more common thing, we can do with any iterator is loop over it: just like an other iterable in Python
           - But iterators are **lazy iterables**, which means they *consume* items as you loop over them
           - So if you start getting items from them, either by calling `next` or by looping, and then you **stop**... the next time you *start* again, you'll be right where you left off
-          - TODO add bolding just before this to line 3 and line 2 to show we started up where we left off
           - And if you loop all the way through an iterator and then try to loop over it again... **it'll be empty**
           - We sometimes say that an iterator that doesn't have any more items in it is **exhausted**: which means its job is done and it doesn't have any use anymore
           - Iterators only go in **one direction**: forwards: they have no *memory* of what came before
@@ -561,16 +564,17 @@ about to yield</span>
 
       <section>
         <pre class="python fragment"><code data-trim data-noescape>
->>> numbers = [2, 1, 3, 4, 7, 11]
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
 def square_all(numbers):
     for n in numbers:
         yield n**2
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
->>> squares = (n**2 for n in numbers)
->>> <span class="fragment">squares_list = [n**2 for n in numbers]
+>>> numbers = [2, 1, 3, 4, 7, 11]
+>>> <span class="fragment">squares = square_all(numbers)
+>>> </span><span class="fragment">squares</span>
+<span class="fragment">&lt;generator object square_all at 0x7f11191b78b8>
+>>> </span><span class="fragment">squares = (n**2 for n in numbers)
+>>> </span><span class="fragment">squares_list = [n**2 for n in numbers]
 >>> </span><span class="fragment">squares_list
 </span><span class="fragment">[4, 1, 9, 16, 49, 121]
 >>> </span><span class="fragment">squares</span><span class="fragment">
@@ -599,9 +603,16 @@ def square_all(numbers):
           <li class="fragment" data-fragment-index=5><span class="fragment strike" data-fragment-index=6>Make an iterator class</span></li>
         </ol>
         <aside class="notes" data-markdown>
-          - TODO
-          - You can think of generators as the easiest way to make an iterator
-          - Great... we can make iterators, but once we've got an iterator... what do we do with it?
+          - So to make an iterator, a lazy iterable, that computes its next item *as* you loop over it...
+          - You can either make a generator function...
+          - Or a generator expression
+          - Because when you call a generator function, you get a generator object back
+          - And right when Python evaluates a generator expression, a generator object is made
+          - And generator objects *are* iterators... the same way file objects are iterators
+          - Technically there is another way to make your own iterator...
+          - By making an iterator class... but those are complicated, kind of hard to read, and there's very little unique benefit to them... so we're not going to do that
+          - You can think of generator functions and generator expressions as the *easiest way* to make your own custom lazy iterable in Python
+          - Great... so we can make iterators by making generators, but once we've got an iterator... what do we do with it?
         </aside>
       </section>
 
@@ -641,15 +652,15 @@ total = sum(squares)
 
       <section>
         <h3>Wrapping iterators in iterators</h3>
-        <pre class="python fragment"><code data-trim data-noescape>
-<span class="fragment">squares = (n**2 for n in range(1000))
-</span><span class="fragment">palindromic_squares = (
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=2><span class="fragment bold-current" data-fragment-index=7>squares = (n**2 for n in range(1000))</span>
+</span><span class="fragment" data-fragment-index=3><span class="fragment bold-current" data-fragment-index=8>palindromic_squares = (
     n
-    for n in squares
-    if str(n) == str(n)[::-1]
-)
-</span><span class="fragment">for n in palindromic_squares:
-    if 100 &lt;= n &lt; 1000:
+    for n in <span class="fragment bold-current" data-fragment-index=7>squares</span>
+    if str(n) == str(n)[::-1]</span>  <span class="fragment" data-fragment-index=4># digits make a palindrome (ex: 464)</span>
+<span class="fragment bold-current" data-fragment-index=8>)</span></span>
+</span><span class="fragment" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=9>for n in palindromic_squares</span>:
+    if 100 &lt;= n &lt; 1000:  <span class="fragment" data-fragment-index=6># 3 digit numbers</span>
         print(n)</span>
         </code></pre>
         <aside class="notes" data-markdown>
@@ -662,15 +673,16 @@ total = sum(squares)
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
 <span class="fragment" data-fragment-index=3>import csv
 </span><span class="fragment" data-fragment-index=2>with open('expenses.csv') as expenses_file:</span><span class="fragment" data-fragment-index=4>
-    expense_rows = <span class="fragment bold-current" data-fragment-index=13>csv.reader</span>(<span class="fragment bold-current" data-fragment-index=12>expenses_file</span>)</span>
-    <span class="fragment" data-fragment-index=10>travel_costs = <span class="fragment bold-current" data-fragment-index=15>sum</span>(</span><span class="fragment bold-current" data-fragment-index=14><span class="fragment" data-fragment-index=6><span class="fragment fade-out" data-fragment-index=11>(</span>
+    <span class="fragment bold-current" data-fragment-index=14>expense_rows</span> = <span class="fragment bold-current" data-fragment-index=13>csv.reader</span>(<span class="fragment bold-current" data-fragment-index=12>expenses_file</span>)</span>
+    <span class="fragment" data-fragment-index=10>travel_costs = <span class="fragment bold-current" data-fragment-index=15>sum</span>(</span><span class="fragment bold-current" data-fragment-index=14><span class="fragment" data-fragment-index=6><span class="fragment fade-out" data-fragment-index=18>(</span>
         <span class="fragment" data-fragment-index=9>float(cost)</span>
-        <span class="fragment" data-fragment-index=7>for date, merchant, cost, category in expenses_row</span>
+        <span class="fragment" data-fragment-index=7>for date, merchant, cost, category in expense_rows</span>
         <span class="fragment" data-fragment-index=8>if category == 'travel'</span>
-    <span class="fragment fade-out" data-fragment-index=11>)</span></span></span><span class="fragment" data-fragment-index=10>)</span>
+    <span class="fragment fade-out" data-fragment-index=18>)</span></span></span><span class="fragment" data-fragment-index=10>)</span><span class="fragment" data-fragment-index=16></span>
         </code></pre>
         <aside class="notes" data-markdown>
           - TODO show csv.reader wrapping a file object as an example instead of this... then a generator wrapping that to identify only rows where one column is a certain value and then taking the output of a different column and converting it to a float to then pass to the sum function
+          - TODO have slide after this talking about how it's hard to make a good analogy about how iterators work but that they're similarity matroyshka dolls or to Unix pipes or ... a sort of lazy looping pipeline
         </aside>
       </section>
 
@@ -728,20 +740,10 @@ with open('logs.txt') as log_file:
       <section>
         <h2>Utility functions <span class="fragment">for iterators</span></h2>
         <aside class="notes" data-markdown>
-          - TODO maybe put this after the by_paragraphs thing and then show other implementations, both easy and hard and talk about how we can make our own lazy iteration helpers by either mashing other ones together or writing a generator function ourselves
-          - TODO show more definitions/equivalent functions
-            - map and filter
-            - takewhile
-            - dropwhile
-            - count
-          - TODO other interesting helpers you could invent
-            - first_match (next on a generator expression)
-            - deep_flatten
-            - all_equal
-            - Example with Django queryset iterator (Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
-          - TODO show classical example of a generator function with `fib`
-          - Making our own iteration helpers is useful, but there are lots that are already built-in to Python
-          - And of course the best code is code that you don't have to write at all
+          - So we can write our own generators to help us process iterables in steps as we loop over them...
+          - But the best generators are the ones you don't even have to write...
+          - There are a number of utility functions built-in to Python and in third-party libraries that can help you in writing lazy looping code
+          - TODO discuss how this applies to Django querysets... useful for processing querysets without taking up lots of memory but also discuss iterator() method (iterator method: Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
         </aside>
       </section>
 
@@ -763,6 +765,7 @@ def enumerate(iterable, start=0):
         n += 1
         </code></pre><span class="fragment"></span>
         <aside class="notes" data-markdown>
+          - TODO better speaker notes: we've already seen enumerate!
           - Who has used Python's enumerate function?
           - `enumerate` is a function which takes an iterable and returns an iterator which will yield tuples containing each of the items in the original iterable along with a number, starting at 0 by default
           - You can think of the `enumerate` function as *equivalent* to this generator function
@@ -770,6 +773,44 @@ def enumerate(iterable, start=0):
         </aside>
       </section>
 
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['pink', 'green', 'purple', 'blue']
+>>> numbers = [2, 1, 3, 4, 7, 11, 18]
+>>> <span class="fragment">list(reversed(colors))</span>
+<span class="fragment">['blue', 'purple', 'green', 'pink']
+>>> </span><span class="fragment">list(zip(numbers, colors))</span>
+<span class="fragment">[(2, 'pink'), (1, 'green'), (3, 'purple'), (4, 'blue')]
+>>> </span><span class="fragment">any('p' in c for c in colors)</span>
+<span class="fragment">True
+>>> </span><span class="fragment">all('p' in c for c in colors)</span>
+<span class="fragment">False</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO there are a lot of other functions built-in to Python that are useful for working with iterators
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+>>> colors = ['pink', 'green', 'purple', 'blue']
+>>> numbers = [2, 1, 3, 4, 7, 11, 18]
+>>> <span class="fragment">tuple(map(lambda n: n**2, numbers))</span>
+<span class="fragment">(4, 1, 9, 16, 49, 121, 324)
+>>> </span><span class="fragment">tuple(n**2 for n in numbers)</span>
+<span class="fragment">(4, 1, 9, 16, 49, 121, 324)
+>>> </span><span class="fragment">tuple(filter(lambda n: n % 2 == 1, numbers))</span>
+<span class="fragment">(1, 3, 7, 11)
+>>> </span><span class="fragment">tuple(n for n in numbers if n % 2 == 1)</span>
+<span class="fragment">(1, 3, 7, 11)</span>
+
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO show map and filter with generator expressions and note I prefer generator expressions over the map and filter functions: both give us iterators, but I think map and filter often result in less readable code
+        </aside>
+      </section>
+
+      <!--
       <section>
         <table class="no-style">
           <thead>
@@ -792,108 +833,71 @@ def enumerate(iterable, start=0):
           - You can think of `zip` as equivalent to *this* generator function
         </aside>
       </section>
+      -->
 
       <section>
         <h3>itertools</h3>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> from itertools import islice
->>> <span class="fragment">squares = (n**2 for n in range(1_000_000))
->>> </span><span class="fragment">list(islice(squares, 9))
-</span><span class="fragment">[4, 9, 16, 25, 36, 49, 64, 81, 100]</span>
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-def islice(iterable, stop):
-    for i, item in enumerate(iterable):
-        if i == stop:
-            return
-        yield item
-    <span class="fragment"># There's a bit more to islice than this</span>
-        </code></pre>
         <aside class="notes" data-markdown>
-          - TODO show table of some helpful itertools functions: zip_longest, takewhile, chain.from_iterable, cycle
-          - TODO transitions and clicks
-          - The `first_n` function we wrote is a subset of the `islice` function, which can do the same thing
+          - TODO
         </aside>
       </section>
 
       <section>
-        <h3>boltons<span class="fragment">.iterutils</span></h3>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+>>> colors = ['pink', 'green', 'purple', 'blue']
+>>> numbers = [2, 1, 3, 4, 7]
+>>> <span class="fragment" data-fragment-index=2>from itertools import chain<span class="fragment" data-fragment-index=5>, zip_longest</span><span class="fragment" data-fragment-index=8>, islice</span><span class="fragment" data-fragment-index=14>, takewhile</span></span>
+>>> </span><span class="fragment" data-fragment-index=3>list(chain.from_iterable(zip(numbers, colors)))
+</span><span class="fragment" data-fragment-index=4>[2, 'pink', 1, 'green', 3, 'purple', 4, 'blue']
+>>> </span><span class="fragment" data-fragment-index=6>list(zip_longest(numbers, colors, fillvalue=''))
+</span><span class="fragment" data-fragment-index=7>[(2, 'pink'), (1, 'green'), (3, 'purple'), (4, 'blue'), (7, '')]
+>>> </span><span class="fragment" data-fragment-index=9>squares = (n**2 for n in numbers)
+>>> </span><span class="fragment" data-fragment-index=10>list(islice(squares, 3))
+</span><span class="fragment" data-fragment-index=11>[4, 1, 9]
+>>> </span><span class="fragment" data-fragment-index=12>list(squares)
+</span><span class="fragment" data-fragment-index=13>[16, 49]
+>>> </span><span class="fragment" data-fragment-index=15>list(takewhile(lambda c: len(c) <= 5, colors))
+</span><span class="fragment" data-fragment-index=16>['pink', 'green']</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO refactor this to show just the tools and example use (not their implementations)
+            - There's islice, which is really handy for grabbing the first `n` items from an iterator without looping over the whole thing
+            - there's `zip_longest`, which is like the built-in `zip` but it loops until the longest iterable is exhausted and uses a fillvalue for missing values
+            - And there's takewhile which is like filter except it stops after it hits something that doesn't match the condition: so it's an alternative to writing a `for` loop with a break statement based on some condition
+            - And there's `chain.from_iterable` which can flatten a two-level deep nested iterable
+            - And there's `cycle` which just infinitely cycles through the values you give to it
+          - TODO transitions and clicks
+        </aside>
+      </section>
+
+      <section>
+        <h3 class="fragment">boltons<span class="fragment">.iterutils</span></h3>
         <aside class="notes" data-markdown>
           - TODO instead of showing by_paragraph and around here, just show examples of chunked_iter (looping over a file 3 lines at a time) and split_iter (looping  over a file paragraph-by-paragraph).
         </aside>
       </section>
 
       <section>
-        <pre class="python fragment"><code data-trim data-noescape>
+        <pre class="python"><code data-trim data-noescape>
 from boltons.iterutils import chunked_iter
 
 with open('logs.txt') as log_file:
-    for lines in chunked_iter(log_file, 100):
+    for lines in <span class="fragment bold-current">chunked_iter(log_file, 100)</span>:
         print(*lines, sep='')
         input("Hit Enter to see the next 100 lines...\n")
         </code></pre>
-        <!--
-        <pre class="python fragment"><code data-trim data-noescape>
-from itertools import count
-from boltons.iterutils import chunked_iter
-
-with open('logs.txt') as log_file:
-    for n, lines in zip(count(start=101, step=100), chunked_iter(log_file, 100)):
-        print(*lines, sep='')
-        input(f"Hit Enter to see lines {n} to {n+99}...\n")
-        </code></pre>
-        -->
         <aside class="notes" data-markdown>
-          - TODO show chunked_iter
+          - TODO
         </aside>
       </section>
 
       <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-def by_paragraph(lines):
-    """Yield each paragraph (lines separated by blank lines)."""
-    paragraph = ""
-    for line in lines:
-        if line == '\n':
-            yield paragraph
-            paragraph = ""
-        else:
-            paragraph += line
-    yield paragraph
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
+        <pre class="python"><code data-trim data-noescape>
 from boltons.iterutils import split_iter
 
-def by_paragraph(lines):
-    """Yield each paragraph (lines separated by blank lines)."""
-    for lines in split_iter(lines, sep=('\n', '')):
-        yield "".join(lines)
-
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO show split_iter better...
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    before = current = None
-    for after in iterable:
-        if current is not None:
-            yield (before, current, after)
-        before, current = current, after
-    if current is not None:
-        yield (before, current, None)
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-from itertools import chain
-from boltons.iterutils import windowed_iter
-
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    return windowed_iter(chain([None], iterable, [None]), size=3)
+for lines in <span class="fragment bold-current">split_iter(lines, <span class="fragment bold-current">sep=('\n', '')</span>)</span>:
+    paragraph = "".join(lines)
+    print(f"&lt;p>\n{paragraph}&lt;/p>")
         </code></pre>
         <aside class="notes" data-markdown>
           - TODO
@@ -906,151 +910,7 @@ def around(iterable):
 
       <section>
         <h2>Problem 1: Revisited</h2>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    <span class="fragment bold-current" data-fragment-index=3>prev = line = None</span>
-    <span class="fragment bold-current" data-fragment-index=2>for next in log_file:</span>
-        <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=4>next = next.rstrip('\n')</span></span>
-        <span class="fragment bold-current" data-fragment-index=5>if line and 'error' in line.lower():</span>
-            <span class="fragment bold-current" data-fragment-index=7>print(prev, line, next, sep='\n')</span>
-        <span class="fragment bold-current" data-fragment-index=3>prev, line = line, next</span><span class="fragment bold-current" data-fragment-index=9></span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - We could *wrap* it in *another* iterator
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-def strip_newlines(lines):
-    for line in lines:
-        yield line.rstrip('\n')
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    <span class="fragment bold-current" data-fragment-index=4>prev = line = None</span>
-    for <span class="fragment bold-current" data-fragment-index=4>next</span> in <span class="fragment bold-current" data-fragment-index=3>strip_newlines(log_file)</span>:
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        <span class="fragment bold-current" data-fragment-index=4>prev, line = line, next</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    before = current = None
-    for after in iterable:
-        if current is not None:
-            yield (before, current, after)
-        before, current = current, after
-    if current is not None:
-        yield (before, current, None)
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    for prev, line, next in around(strip_newlines(log_file)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO bolds and note edge case (last line having an error) that we weren't actually taking into account before
-          - TODO Python doesn't care if our log file is 10 lines or 10 million lines: this code will work the same way in either case
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    before = current = None
-    for after in iterable:
-        if current is not None:
-            yield (before, current, after)
-        before, current = current, after
-    <span class="fragment bold-current">if current is not None:
-        yield (before, current, None)</span>
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    prev = line = None
-    for next in strip_newlines(log_file):
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        prev, line = line, next
-    <span class="fragment">if line and 'error' in line.lower():
-        print(prev, line, None, sep='\n')</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    prev = line = None
-    for next in log_file:
-        next = next.rstrip('\n')
-        if line and 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        prev, line = line, next
-    <span class="fragment" data-fragment-index=2>if line and 'error' in line.lower():
-        print(prev, line, None, sep='\n')</span>
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
-with open('logs.txt') as log_file:
-    for prev, line, next in <span class="fragment bold-current" data-fragment-index=7>around</span>(<span class="fragment bold-current" data-fragment-index=6>strip_newlines</span>(<span class="fragment bold-current" data-fragment-index=5>log_file</span>)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        </code></pre><span class="fragment" data-fragment-index=8></span>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python" data-fragment-index=3><code data-trim data-noescape>
-def around(iterable):
-    """Yield (prev, item, next) for each item in iterable."""
-    before = current = None
-    for after in iterable:
-        if current is not None:
-            yield (before, current, after)
-        before, current = current, after
-    if current is not None:
-        yield (before, current, None)
-
-def strip_newlines(lines):
-    for line in lines:
-        yield line.rstrip('\n')
-
-with open('logs.txt') as log_file:
-    for prev, line, next in around(strip_newlines(log_file)):
-        if 'error' in line.lower():
-            print(prev, line, next, sep='\n')
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - TODO
-        </aside>
-      </section>
-
-      </section>
-
-      <section>
-
-      <section>
-        <h2>Problem 2: Revisited</h2>
+        <h3 class="fragment">Find first 10 errors from yesterday</h3>
         <aside class="notes" data-markdown>
           - TODO
         </aside>
@@ -1112,7 +972,7 @@ with open('log.txt') as log_file:
         </aside>
       </section>
 
-      <section data-transition="fade-in slide-out">
+      <section data-transition="fade-in fade-out">
         <pre class="python"><code data-trim data-noescape>
 from datetime import date, timedelta
 from itertools import islice
@@ -1140,7 +1000,232 @@ with open('log.txt') as log_file:
         </aside>
       </section>
 
+      <section data-transition="fade-in slide-out">
+        <pre class="python"><code data-trim data-noescape>
+from datetime import date, timedelta
 
+
+yesterday = date.today() - timedelta(1)
+
+with open('log.txt') as log_file:
+    i = 0
+    for line in log_file:
+        if str(yesterday) in line and 'error' in line.lower():
+            i += 1
+            if i &lt;= 10:
+                print(line, end='')
+            else:
+                print('[...]')
+                break<span>
+
+        </span></code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Problem 2: Revisited</h2>
+        <h3 class="fragment">Find logged errors (with context)</h3>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    <span class="fragment bold-current" data-fragment-index=3>prev = line = ''</span>
+    <span class="fragment bold-current" data-fragment-index=2>for next in log_file:</span>
+        <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=4>next = next.rstrip('\n')</span></span>
+        <span class="fragment bold-current" data-fragment-index=5>if line and 'error' in line.lower():</span>
+            <span class="fragment bold-current" data-fragment-index=7>print(prev, line, next, sep='\n')</span>
+        <span class="fragment bold-current" data-fragment-index=3>prev, line = line, next</span><span class="fragment bold-current" data-fragment-index=9></span>
+    <span class="fragment bold-current" data-fragment-index=8>if line and 'error' in line.lower():
+        print(prev, line, sep='\n')</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - We could *wrap* it in *another* iterator
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+def strip_newlines(lines):
+    for line in lines:
+        yield line.rstrip('\n')
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    <span class="fragment bold-current" data-fragment-index=4>prev = line = ''</span>
+    for <span class="fragment bold-current" data-fragment-index=4>next</span> in <span class="fragment bold-current" data-fragment-index=3>strip_newlines(log_file)</span>:
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        <span class="fragment bold-current" data-fragment-index=4>prev, line = line, next</span>
+    if <span class="fragment bold-current" data-fragment-index=4>line</span> and 'error' in line.lower():
+        print(<span class="fragment bold-current" data-fragment-index=4>prev</span>, line, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def around(iterable, fillvalue=None):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = fillvalue
+    for after in iterable:
+        if current is not fillvalue:
+            <span class="fragment bold-current" data-fragment-index=1>yield (before, current, after)</span>
+        before, current = current, after
+    if current is not fillvalue:
+        <span class="fragment bold-current" data-fragment-index=2>yield (before, current, fillvalue)</span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    for prev, line, next in <span class="fragment bold-current" data-fragment-index=7>around</span>(<span class="fragment bold-current" data-fragment-index=6>strip_newlines</span>(<span class="fragment bold-current" data-fragment-index=5>log_file</span>)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre><span class="fragment" data-fragment-index=8></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO bolds and note edge case (last line having an error) that we weren't actually taking into account before
+          - TODO Python doesn't care if our log file is 10 lines or 10 million lines: this code will work the same way in either case
+        </aside>
+      </section>
+
+      <!--
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+def around(iterable, fillvalue=''):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = fillvalue
+    for after in iterable:
+        if current is not fillvalue:
+            yield (before, current, after)
+        before, current = current, after
+    <span class="fragment bold-current">if current is not fillvalue:
+        yield (before, current, fillvalue)</span>
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = fillvalue
+    for next in strip_newlines(log_file):
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    <span class="fragment">if line and 'error' in line.lower():
+        print(prev, line, sep='\n')</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = None
+    for next in log_file:
+        next = next.rstrip('\n')
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    <span class="fragment" data-fragment-index=2>if line and 'error' in line.lower():
+        print(prev, line, None, sep='\n')</span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    for prev, line, next in <span class="fragment bold-current" data-fragment-index=7>around</span>(<span class="fragment bold-current" data-fragment-index=6>strip_newlines</span>(<span class="fragment bold-current" data-fragment-index=5>log_file</span>)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre><span class="fragment" data-fragment-index=8></span>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+      -->
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python" data-fragment-index=3><code data-trim data-noescape>
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    before = current = None
+    for after in iterable:
+        if current is not None:
+            yield (before, current, after)
+        before, current = current, after
+    if current is not None:
+        yield (before, current, None)
+
+def strip_newlines(lines):
+    for line in lines:
+        yield line.rstrip('\n')
+
+with open('logs.txt') as log_file:
+    for prev, line, next in around(strip_newlines(log_file)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <pre class="python" data-fragment-index=3><code data-trim data-noescape>
+from itertools import chain
+from boltons.iterutils import windowed_iter
+
+def around(iterable):
+    """Yield (prev, item, next) for each item in iterable."""
+    return windowed_iter(chain([''], iterable, ['']), size=3)
+
+def strip_newlines(lines):
+    for line in lines:
+        yield line.rstrip('\n')
+
+with open('logs.txt') as log_file:
+    for prev, line, next in around(strip_newlines(log_file)):
+        if 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      <section data-transition="fade-in slide-out">
+        <pre class="python" data-fragment-index=3><code data-trim data-noescape>
+with open('logs.txt') as log_file:
+    prev = line = ''
+    for next in log_file:
+        next = next.rstrip('\n')
+        if line and 'error' in line.lower():
+            print(prev, line, next, sep='\n')
+        prev, line = line, next
+    if line and 'error' in line.lower():
+        print(prev, line, sep='\n')
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h2>Words are hard</h2>
+        <aside class="notes" data-markdown>
+          - TODO
+        </aside>
       </section>
 
       <section data-transition="fade-in slide-out">
@@ -1164,6 +1249,8 @@ with open('log.txt') as log_file:
           - TODO maybe talk about how when we have an object of type list I refer to that as "a list" and an object of type function I refer to as a "function"
           - TODO Luciano in Fluent Python (page 429): "Calling a generator function returns a generator."
         </aside>
+      </section>
+
       </section>
 
       <section>
