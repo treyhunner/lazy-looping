@@ -262,7 +262,7 @@ This is line 4 (the end of the file)
           <li class="fragment">creating an iterator</li>
         </ul>
         <aside class="notes" data-markdown>
-          - So when I the phrase "lazy looping" I'm either referring to:
+          - So when I use the phrase "lazy looping" I'm either referring to:
             - Looping over an iterator **(click)**, which is a lazy iterable
             - Or creating our own iterator **(click)**, which can be looped over later
           - Lazy looping is *all about* **iterators**
@@ -676,6 +676,13 @@ total = sum(squares)
       <section>
         <h2 class="fragment">Utility functions for iterators</h2>
         <aside class="notes" data-markdown>
+          - TODO remove the "this is enumerate and we're going to re-implement it"... show something else instead.
+          - TODO sum up this whole section to this... and move it later (after around problem):
+            - the best code is you code you don't even need to write
+            - If you think that embracing lazy looping might help you write better code, I don't want you to then immediately invent all your own generator functions
+            - This enumerate generator function shouldn't exist... because this is built right into Python!
+            - This first_n function that yields just the first `n` items in an iterable, which might be handy when working with iterators... this function also shouldn't exist: because the standard library has a function called islice that does the same thing
+            - when you're practicing lazy looping, look in the Python built-ins, look in the itertools module, and look in a couple third-party libraries to see if someone else has already written the iterator helper you need... for example that `around` function we made... we could have used the boltons library or the more-itertools library to do most of the work inside this function for us.
           - So we can write our own generators to help us process iterables in steps as we loop over them...
           - And we can make as many steps as we'd like before we end up looping, but wrapping iterators in iterators
           - But while you're figuring out how to accomplish your iterator-wrapping goals, keep in mind that the best generators... are the ones you don't even have to write...
