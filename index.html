@@ -34,22 +34,16 @@
           <small><a href="https://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <aside class="notes" data-markdown>
-            TODO
+            - My name is Trey
+            - If you write Python code for a living...
           </aside>
         </section>
 
         <section>
-          <div class="aboutme-card">
-            <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos" alt="Truthful Technology"></a>
-          </div>
-          <div class="aboutme-card">
-            <a href="http://pythonmorsels.com"><img src="morsels-logo.svg" class="no-style aboutme-logos" alt="Python Morsels"></a>
-          </div>
+            <a href="http://pythonmorsels.com"><img src="morsels-logo.svg" class="no-style" alt="Python Morsels" style="max-height: 50vh;"></a>
           <aside class="notes" data-markdown>
-            - My name is Trey
-            - I help Python &amp; Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
-            - And I run a Python exercise subscription service where where I send out 1 Python exercise every week.  It's called Python Morsels.
-            - TODO
+            - ...you should checkout out Python Morsels...
+            - sign up, choose your skill level: novice, intermediate, or advanced... and learn something new every week
           </aside>
         </section>
 
@@ -63,8 +57,8 @@
         <aside class="notes" data-markdown>
           - I'd like to start by *very briefly* looking at two blocks of code that are difficult to read
           - I don't expect to remember or really even understand these blocks of code right now, but these are going to be our starting point
-          - So problem 1...
-          - We have some code that again looks for errors in a log file, but only the ones that happened yesterday and only the first 10 lines
+          - So problem 1... **(click)**
+          - We have some code that looks for errors in a log file **(click)**, but only the ones that happened yesterday and only the first 10 lines
         </aside>
       </section>
 
@@ -88,7 +82,7 @@ with open('log.txt') as log_file:
         <aside class="notes" data-markdown>
           - This is our code
           - We're looping over lines in our log file, checking for yesterday's date in them, and then we have a lot of logic around getting just the first 10
-          - If there were more than errors yesterday, we print out an ellipsis to signify that there's more but that we stopped after 10
+          - If there were more than 10 errors yesterday, we print out an ellipsis to signify that there's more but that we stopped after 10
         </aside>
       </section>
 
@@ -100,8 +94,8 @@ with open('log.txt') as log_file:
         <h2 class="fragment">Problem 2</h2>
         <h3 class="fragment">Find logged errors (with context)</h3>
         <aside class="notes" data-markdown>
-          - Problem 2...
-          - We have some code that finds lines in a log file that contain errors and then we print out the line itself and the two lines around it
+          - Problem 2... **(click)**
+          - We have some code that again finds lines in a log file that contain errors **(click)** but it prints out the error line, the line just before it and the line just after it
         </aside>
       </section>
 
@@ -131,11 +125,12 @@ with open('logs.txt') as log_file:
       <section>
         <h2 class="fragment current-visible" data-fragment-index=1>Lazy Looping</h2>
         <h3><span class="fragment" data-fragment-index=4>What are </span><span class="fragment" data-fragment-index=2>iterables</span><span class="fragment" data-fragment-index=3> and iterators</span><span class="fragment" data-fragment-index=4>?</span></h3>
+        <h3><br></h3>
         <aside class="notes" data-markdown>
           - You can completely forget about those for now...
-          - We're going to come back to those two problems at the end of this talk and refactor those code blocks, by using lazy looping
-          - Lazy Looping is all about iterables and iterators
-          - So the first thing we need to do is define what iterables and iterators are...
+          - and we'll come back to those two problems at the end of the talk when we refactor those code examples to use lazy looping **(click)**
+          - Lazy Looping is all about iterables **(click)** and iterators **(click)**
+          - So the first thing we need to do is **(click)** define what iterables and iterators are...
         </aside>
       </section>
 
@@ -149,7 +144,7 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
         <aside class="notes" data-markdown>
           - An iterable is **(click)** anything that you can loop over
           - lists, strings, tuples, dictionaries, files, and lots of other things things in Python are iterables
-          - If you can write a `for` loop to iterate over some object it is, by definition, an iterable
+          - If you can write **(click)** a `for` loop to iterate over some object, it is, by definition, an iterable **(click)**
           - We're mostly already intuitively familiar with iterables... but what are iterators?
         </aside>
       </section>
@@ -160,13 +155,13 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
         <p class="fragment" data-fragment-index=3><span class="fragment strike" data-fragment-index=6>The thing that powers iterables</span></p>
         <p class="fragment" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=7>A special kind of "lazy" iterable</span></p>
         <aside class="notes" data-markdown>
-          - An iter-*ator* is a bit more complicated than an iter-*able*
+          - An iter-*ator* **(click)** is a bit more complicated than an iter-*able* **(click)**
           - ...
           - There are two definitons of iterators:
-            1. First: Iterators are the objects that powers all iteration in Python: you can get an iterator from any iterable in order to loop over one item at a time
-            2. Second: you can think of iterators as a special kind of *lazy* iterable which is *consumed* as you loop over
-          - We're going to ignore that first definition.  It doesn't really matter to us right now.
-          - We're going to focus mostly on that *second* definition.
+            1. First: Iterators are the objects that powers all iteration in Python **(click)**: you can get an iterator from any iterable in order to loop over one item at a time
+            2. Second: you can think of iterators as **(click)** a special kind of *lazy* iterable which is *consumed* as you loop over
+          - We're going to ignore that first definition. **(click)**  It doesn't really matter to us right now.
+          - We're going to focus pretty much exclusively on that *second* definition. **(click)**
           - If you *are* interested in that first definition...
         </aside>
       </section>
@@ -180,7 +175,7 @@ for thing in <span class="fragment bold-current">my_iterable</span>:
         </p>
         </div>
         <aside class="notes" data-markdown>
-          - ... you can watch another talk of mine, called Loop Better
+          - ... you can watch another talk of mine, called Loop Better **(click)**
           - In it I talk about how `for` loops work under the hood in Python and a bunch of other stuff that's outside the scope of this talk today...
         </aside>
       </section>
@@ -202,27 +197,34 @@ This is line 4 (the end of the file)
 []</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - So we know what iterables are and we can think of examples of them...
-          - But what's an example of an iterator?  Where do we see these things in Python?
-          - One example of an iterable is a file.
-          - In Python, **file objects are iterators**: files are *lazy iterables*...
-          - By lazy I mean they're able to do work in order to generate items as you loop over them
-          - We can do two things with an iterators:
-            - We can pass them to Python's built-in `next` function, which gives us the *next* in them
-            - ... with files that gives us the next line in the file
-            - The other, more common thing, we can do with any iterator is loop over it: just like an other iterable in Python
-          - But iterators are **lazy iterables**, which means they *consume* items as you loop over them
-          - So if you start getting items from them, either by calling `next` or by looping, and then you **stop**... the next time you *start* again, you'll be right where you left off
-          - And if you loop all the way through an iterator and then try to loop over it again... **it'll be empty**
-          - We sometimes say that an iterator that doesn't have any more items in it is **exhausted**: which means its job is done and it doesn't have any use anymore
-          - Iterators only go in **one direction**: forwards: they have no *memory* of what came before
+          - You can probably think of an example of an iterable: but iterators are a bit more mysterious
+          - *This* is an iterator. **(click)** In Python, **file objects** *are iterators* **(click)**
+          - I'm going to use this file to show you the two things that we can do with *all* iterators...
+            - We can pass them to the `next` function **(click)**, which gives us the *next* in them... with files that's the next line **(click)** in the file
+            - Or, the other, more common thing we can do with them, is loop over them **(click)**: just like an other iterable
+          - But the things in iterators get *consumed* as you loop over them
+          - So if you start getting items from them, and then you *stop*... the next time you *start* again, you'll be right where you left off
+          - And if you loop all the way through an iterator and then try to loop over it again... it'll be empty.  This iterator is *exhausted*.
         </aside>
       </section>
 
       <section>
-        <h3>The benefits of iterators</h3>
+        <h3>Iterators are lazy</h3>
+        <ul>
+          <li class="fragment">They compute their next value as you loop over them</li>
+          <li class="fragment">They might not store any values "inside" themselves at all</li>
+        </ul>
         <aside class="notes" data-markdown>
-          - TODO why care about iterators?  Well in the case of files... when you loop over a 1GB log file... you'll read each line of that file one at a time... technically Python maintains a small buffer of lines, but from our perspective we're getting one line at a time... when we read lines from our 1GB file, we're certainly not going to expect our system memory to spike by 1GB suddenly... Python never actually stores the whole file in memory: it reads from it lazily... and it's able to do this because it's behaving like an lazy iterable: an iterator
+          - Iterators are **lazy iterables**
+          - What I mean *lazy* is that, they don't do a whole bunch of work upfront...
+          - They do little *bits* as you loop over them **(click)**
+          - When you ask an iterator for its next item, it'll do some work to figure out what that item is
+          - They usually don't even know what items they've given to you **(click)**... or how many there might be
+          - So they're usually very memory efficient
+          - The only thing they know how to do is get their next item: they only know how to *keep moving forward*
+          - In the case of files, we get one line at a time from files
+          - Python uses a buffer of file data under the hood that's more than just one line, but from our perspective it may as well be reading line-by-line...
+          - Because it doesn't matter whether we're reading a 1MB file or a 1GB file... we'll store the same amount of text in memory as we loop either way.
         </aside>
       </section>
 
@@ -233,9 +235,9 @@ This is line 4 (the end of the file)
           <li class="fragment">The <code>next</code> function consumes just one item</li>
         </ol>
         <aside class="notes" data-markdown>
-          - There are two **rules** that indicate whether something is an iterator
-            1. When you loop over an iterator, you'll **consume** items from it
-            2. And if you pass it to the  `next` function, you'll consume just *one* from it
+          - There are two **rules** that indicate whether something *is* an iterator
+            1. When you loop over an iterator **(click)**, you'll **consume** items from it
+            2. And if you pass it to the  `next` function **(click)**, you'll consume just *one* from it
           - Any iterable which is consumed as you loop over it is *almost certainly* an iterator and anything you can pass to the `next` function is *definitely* an iterator
           - ...
           - Because we consume items from iterators as we loop over them, you can think of iterators as like...
@@ -247,6 +249,7 @@ This is line 4 (the end of the file)
           - Hello Kitty PEZ dispensers.
           - When you take a PEZ out, it's gone: you've **consumed** it
           - And once the dispenser is empty, it's useless: there's no way to reload it
+          - And it has no memory of what used to be in it, or how many things might still be in it
           - Iterators are **lazy, single-use** iterables
         </aside>
       </section>
@@ -258,11 +261,10 @@ This is line 4 (the end of the file)
           <li class="fragment">creating an iterator</li>
         </ul>
         <aside class="notes" data-markdown>
-          - So we haven't really talked about this phrase: lazy looping... or what "laziness" means
           - So when I the phrase "lazy looping" I'm either referring to:
-            - Looping over an iterator, which is a lazy iterable
-            - Or creating our own iterator, which can be looped over later
-          - Lazy looping is all about iterators
+            - Looping over an iterator **(click)**, which is a lazy iterable
+            - Or creating our own iterator **(click)**, which can be looped over later
+          - Lazy looping is *all about* **iterators**
           - ...
           - We already *know* how to loop over an iterator: we write a `for` loop, just like any other time we're looping
           - So...
@@ -300,11 +302,11 @@ This is line 4 (the end of the file)
         </code></pre>
         <aside class="notes" data-markdown>
           - We know that file objects in Python are iterators...
-          - Another place we get an iterator from is Python's `enumerate` function
-          - When we call `enumerate` we get back an `enumerate` object... and this object is an iterator
-          - So just like other iterators, we can call `next` on it, or as we'd usually do with `enumerate` ... we can loop over it
-          - And *as we loop over it*, it's *creating* two-item tuples that we're *consuming* from it
-          - So if we loop over it a second time... it'll be empty
+          - Another place we get an iterator from is Python's `enumerate` function **(click)**
+          - When we call `enumerate` **(click)** we get back an `enumerate` object **(click)**... and this object is an iterator
+          - So just like other iterators, we can call `next` on it **(click)**, or as we'd usually do with `enumerate` ... we can loop over it **(click)**
+          - And *as we loop over it* **(click)**, it's *creating* two-item tuples **(click)** that we're *consuming* from it **(click)**
+          - So if we loop over it a second time **(click)**... it'll be empty **(click)**
           - Because we've already consumed everything in this iterator
           - ...
           - Let's try to recreate this `enumerate` function...
@@ -322,14 +324,14 @@ def enumerate(iterable, start=0):
     <span class="fragment bold-current" data-fragment-index=2><span class="fragment fade-out" data-fragment-index=4>return values</span></span><span class="fragment" data-fragment-index=3></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - This function is very similar to the built-in `enumerate` function... except there's one big difference: it's not lazy... by that I mean that it doesn't return an iterator
-          - Instead of computing items as we loop over it, it just builds up a whole list of tuples right when we call it...
-          - And then returns them to us
-          - We can make this function into an iterator though...
+          - This function is very similar to the built-in `enumerate` function... except there's *one big difference*: it's **not lazy**... by that I mean that it doesn't return an iterator
+          - Instead of computing items as we loop over it, it just **(click)** builds up a whole list of tuples right when we call it...
+          - And then **(click)** returns them to us
+          - We can make this function **(click)** into an iterator though...
           - And we can do it by actually *removing* code from it
-          - First we'll remove the `return` statement
-          - Then we'll remove the empty `values` list
-          - Then that `values.append` call (which doesn't make any sense anymore)... it's going to turn into **a `yield` statement**
+          - First we'll remove the `return` statement **(click)**
+          - Then we'll remove the empty `values` list **(click)**
+          - Then that `values.append` call **(click)** (which doesn't make any sense anymore)... it's going to turn into *a `yield` statement*
         </aside>
       </section>
 
@@ -368,14 +370,14 @@ def enumerate(iterable, start=0):
 <span class="fragment" data-fragment-index=5>[]</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - ... is called a **generator function**
+          - ... is called a *generator function* **(click)**
           - Generator functions return iterators when you call them
-          - So when we call this `enumerate` function we've just made... we can take the thing we get back from it and
-            - call `next` on it
-            - And we can loop over it
-            - And if we loop over twice, it'll be empty the second time
-            - Because our generator function returned **an iterator** to us: just the like the built-in `enumerate` does
-          - That `yield` statement turned what was a **regular function** into a **generator function**
+          - So when we **(click)** call this `enumerate` function we've just made... we can take the thing we get back from it and
+            - call `next` on it **(click)**
+            - And we can loop over it **(click)**
+            - And if we loop over twice **(click)**, it'll be empty the second time **(click)**
+            - Because our generator function returned **an iterator** to us: just the like Python's built-in `enumerate` function does
+          - That `yield` statement **(click)** turned what was a **regular function** into a **generator function**
           - And generator functions are pretty different from normal functions
         </aside>
       </section>
@@ -404,17 +406,17 @@ def enumerate(iterable, start=0):
 </span><span class="fragment" data-fragment-index=12>&lt;generator object enumerate at 0x7febbdeaae58></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - If you have a regular function in Python...
-          - And you call it
-          - It'll execute that function
-          - And if we look at the thing it gave us back
-          - We'll see its return value
-          - But if you take a generator function
-          - And you call it...
-          - Nothing happens
-          - And if we look at what it gave us back...
-          - We'll see it gave us a generator object
-          - **Functions** and **generator functions** are *completely* different animals: all because of that `yield` statement
+          - If you have **(click)** a regular function in Python...
+          - And you call it **(click)**
+          - It'll execute that function **(click)**
+          - And if we look at the thing it gave us back **(click)**
+          - We'll see its return value **(click)**
+          - But if you take a generator function **(click)**
+          - And you call it... **(click)**
+          - ... **(click)** ... Nothing happens.
+          - And if we look at what it gave us back... **(click)**
+          - We'll see it gave us a generator object **(click)**
+          - **Functions** and **generator functions** are *completely* different animals: all because of that `yield` statement **(click)**
           - When we call a function, we gets return value
           - When we call a generator function we get a generator object.
           - And generator objects are iterators, the same way *file* objects are iterators
@@ -449,64 +451,74 @@ about to yield</span>
         <aside class="notes" data-markdown>
           - To explain how generator functions *work* we're going to loop over a generator object and walk through every step of what our code does along the way...
           - This is going to be quick so if you've been asleep up to this point, maybe wake up for a minute or so
-          - When we loop over the generator object we get back from our custom `enumerate` generator function...
+          - When we loop over the generator object **(click)**  we get back from our custom `enumerate` generator function...
           - It's going to start executing our function
-          - So we'll see those first couple print calls happen
-          - And then Python gets to the `yield` statement and it puts the generator on pause and yields control back to our loop: passing that back to us
-          - We then executing the body of our loop which prints something out
-          - And then we ask the generator for its next item
-          - ...which means it's going to start up again where it left off, right after that last `yield`
-          - So it prints, and then it gets to another iteration of its loop, prints again, and then yields again
-          - Which puts it on pause, and passes another item back to us...
-          - And we execute the body of our loop, which prints something out
-          - And then we ask for another item again... which starts our generator executing where it left off, which means it'll print again
-          - And then try to loop, but see that there aren't more items to loop over, so it'll execute the rest of the generator function
+          - So we'll see **(click)** those first couple print calls happen **(click)**
+          - And then Python gets to **(click)** the `yield` statement and it puts the generator on pause and yields control back to our loop: passing that tuple back to us **(click)**
+          - We then executing the **(click)** body of our loop which prints something out **(click)**
+          - And then we **(click)** ask the generator for its next item
+          - ...which means it's going to start up again where it left off, right after that last `yield` **(click)**
+          - So it prints **(click)**, and then it gets to another iteration of its loop **(click)**, prints again **(click)**, and then yields again **(click)**
+          - Which puts it on pause, and passes **(click)** another item back to us...
+          - And we execute **(click)** the body of our loop, which **(click)** prints something out
+          - And then we ask **(click)** for another item again... which starts our generator executing where it left off **(click)**, which means it'll print again **(click)**
+          - And then try to loop **(click)**, but see that there aren't more items to loop over, so it'll execute **(click)** the rest of the generator function **(click)**
           - And then when it returns, it'll be exhausted: there are no more items in this generator. So we're done looping.
+          - Generator functions are really different from regular functions
           - ...
-          - TODO generator functions are different from regular functions... regular functions can control what they return to you, whereas a generator function always returns a generator to you... but that generator is an iterator: a lazy iterable, and yield statements are the thing that control the laziness: the passing of a message back to the code that's looping over it
-          - TODO unlike regular functions, generator functions are a very special purpose tool: they're specifically for making a function which returns a lazy iterable, an iterator, that can do work and then put itself on pause to give you its next item
         </aside>
       </section>
 
       <section>
-        TODO
+        <h4><strong>Generators <span class="fragment">(and iterators)</span> <span class="fragment">do work as you loop over them</span></strong></h4>
+        <ul class="fragment">When asked for their next item:
+          <li class="fragment">They do work to figure out that item</li>
+          <li class="fragment">Yield that item to the loop they're in</li>
+          <li class="fragment">And put themselves on pause until asked for another item</li>
+        </ul>
+        </p>
         <aside class="notes" data-markdown>
-          - TODO drive home the point: passing a 10GB log file to a generator function doesn't result in all the lines in that file being stored in memory... as we loop over the generator, it'll loop over lines our log file
-          - TODO perfect place to use a generator is when you want to take some... (figure out the tweetable statement here)
-          - TODO show trivial example (not <p> thing... that's too much) and show how we can make a generator function to move some of the logic out of it
+          - Generators...
+          - And all iterators... **(click)**
+          - Compute their items **(click)** as you loop over them
+          - When you ask a generator for its next item... **(click)**
+          - It'll execute code **(click)** to figure out what that item is
+          - Then it'll yield that item **(click)** to whoever is looping over it
+          - And put itself on pause **(click)**, until you ask it to generate another item for you
+          - This is what I mean when I say iterators are lazy: they do work, give you an item, and then put themselves on pause until the next time you ask them for another item.
         </aside>
       </section>
 
       <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-def square_all(numbers):
-    for n in numbers:
-        yield n**2
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> numbers = [2, 1, 3, 4, 7, 11]
->>> <span class="fragment">squares = square_all(numbers)
->>> </span><span class="fragment">squares</span>
-<span class="fragment">&lt;generator object square_all at 0x7f11191b78b8>
->>> </span><span class="fragment">squares = (n**2 for n in numbers)
->>> </span><span class="fragment">squares_list = [n**2 for n in numbers]
->>> </span><span class="fragment">squares_list
-</span><span class="fragment">[4, 1, 9, 16, 49, 121]
->>> </span><span class="fragment">squares</span><span class="fragment">
-&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+>>> <span class="fragment bold-current" data-fragment-index=15>def square_all(numbers):
+...     for n in numbers:
+...         yield n**2</span>
+...
+>>> <span class="fragment" data-fragment-index=2>numbers = [2, 1, 3, 4, 7, 11]
+>>> </span><span class="fragment" data-fragment-index=3>squares = square_all(numbers)
+>>> </span><span class="fragment" data-fragment-index=4>squares</span>
+<span class="fragment" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=14>&lt;generator object square_all at 0x7f11191b78b8></span>
+>>> </span><span class="fragment" data-fragment-index=6><span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=13>squares = (n**2 for n in numbers)</span></span>
+>>> </span><span class="fragment" data-fragment-index=7>squares_list = [n**2 for n in numbers]
+>>> </span><span class="fragment" data-fragment-index=8>squares_list
+</span><span class="fragment" data-fragment-index=9>[4, 1, 9, 16, 49, 121]
+>>> </span><span class="fragment" data-fragment-index=10>squares</span><span class="fragment" data-fragment-index=11>
+<span class="fragment bold-current" data-fragment-index=12>&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span></span><span class="fragment" data-fragment-index=16></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO
-          - This is a generator expression.  It looks like a list comprehension, but it doesn't return a list to us: it returns a generator.
-          - This... is equivalent ... **(click)** to this
-          - Generator expressions are not necessarily shorter than generator functions, but you can inline them into other code, just like you can inline list comprehensions
-          - So instead of making a whole function just to make a lazy iterable, **(click)** you can write a single expression
-          - I do want to note that this example of counting from 1 to 10 is silly and it's very contrived... we're going to look at a couple more realistic examples in a bit
-          - But first... let's talk about all these fancy words I've been using
-          - TODO highlight things while saying:
-            -  Generator functions and generator expressions are a special syntax for creating iterators in Python. 
-            - this is a generator function (because of that yield statement) and this is a generator expression
-            - calling a generator function or evaluating a generator expression will give you a generator object: which is an iterator, which is a lazy single-use iterable
+          - Generator functions return generators to us and generators are iterators
+          - *This* **(click)** is a generator function.
+          - And **(click)** if we call this generator function... **(click)**
+          - The thing we'll get back... **(click)**
+          - Is a generator object **(click)**
+          - But... this isn't the only way to make generator objects
+          - *This* **(click)** is a generator expression
+          - It *looks* like a list comprehension **(click)**
+          - Except list comprehensions **(click)** make new lists **(click)**
+          - But generator expressions **(click)** make new *generators* **(click)**
+          - *This* generator object **(click)** from this generator expression **(click)** does the same thing as this generator object **(click)** from this generator function **(click)**
+          - So instead of making a whole function that you need to call to make an iterator, sometimes **(click)** you can just write a single expression
         </aside>
       </section>
 
@@ -519,14 +531,13 @@ def square_all(numbers):
         </ol>
         <aside class="notes" data-markdown>
           - So to make an iterator, a lazy iterable, that computes its next item *as* you loop over it...
-          - You can either make a generator function...
-          - Or a generator expression
-          - Because when you call a generator function, you get a generator object back
-          - And right when Python evaluates a generator expression, a generator object is made
+          - You can either make a generator function... **(click)**
+          - Or a generator expression **(click)**
+          - Because when you call a generator function **(click)**, you get a generator object back
+          - And right when Python evaluates a generator expression **(click)**, a generator object is made
           - And generator objects *are* iterators... the same way file objects are iterators
-          - Technically there is another way to make your own iterator...
-          - By making an iterator class... but those are complicated, kind of hard to read, and there's very little unique benefit to them... so we're not going to do that
-          - You can think of generator functions and generator expressions as the *easiest way* to make your own custom lazy iterable in Python
+          - Technically there is another way to make your own iterator... by making an iterator class **(click)**... but those are complicated and there's very little benefit to them... so we're not going to talk about that **(click)**
+          - ... You can think of generator functions and generator expressions as the *easiest way* to make your own custom lazy iterable in Python
           - Great... so we can make iterators by making generators, but once we've got an iterator... what do we do with it?
         </aside>
       </section>
@@ -557,9 +568,10 @@ total = sum(squares)
         <aside class="notes" data-markdown>
           - Loop over it.
           - We loop over it and do something with each of the things inside it
-          - So if we have an iterator of squares of numbers
-          - We could add up all those squares by loop with a `for` loop and adding as we go
-          - Or we could delegate this work to Python's `sum` function, which will do the looping and the adding for us
+          - So if we have **(click)** an iterator of squares of numbers, which we made by using generator expression
+          - We could add up all those squares **(click)** with a `for` loop and that adds numbers up as we loop
+          - Or we could delegate this work to Python's `sum` function **(click)**, which will do the looping and the adding for us
+          - TODO maybe put parens in parens and show removing them here?
           - Regardless of how we do it: the one thing this iterator will ultimately be used for is being looped over
           - But there is one thing we could do with an iterator *before* we loop over it...
         </aside>
@@ -568,26 +580,26 @@ total = sum(squares)
       <section>
         <h3>Wrapping iterators in iterators</h3>
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-<span class="fragment" data-fragment-index=2><span class="fragment bold-current" data-fragment-index=9>squares</span> = (n**2 for n in <span class="fragment bold-current" data-fragment-index=10>range(1000)</span>)
-</span><span class="fragment" data-fragment-index=3><span class="fragment bold-current" data-fragment-index=7>palindromic_squares</span> = (
+<span class="fragment bold-current" data-fragment-index=9>squares</span> = (n**2 for n in <span class="fragment bold-current" data-fragment-index=10>range(1000)</span>)
+<span class="fragment" data-fragment-index=3><span class="fragment bold-current" data-fragment-index=7>palindromic_squares</span> = (
     n
     for n in <span class="fragment bold-current" data-fragment-index=9>squares</span>
     if str(n) == str(n)[::-1]  <span class="fragment" data-fragment-index=4># digits make a palindrome (ex: 464)</span>
 )</span>
 </span><span class="fragment" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=7>for n in palindromic_squares</span>:
     if 100 &lt;= n &lt; 1000:  <span class="fragment" data-fragment-index=6># 3 digit numbers</span>
-        print(n)</span>
+        print(n)</span><span class="fragment" data-fragment-index=11></span>
         </code></pre>
         <aside class="notes" data-markdown>
           - We can wrap it in another iterator
-          - That iterator we had of squares of numbers...
-          - We could take that and wrap *another* generator expression around it
-          - This second generator expression is filtering down the squares so that we only have the ones where if you reversed their digits, they'd be the same number
-          - When we end up finally looping, to do a bit more filtering and then print out the numbers...
-          - ...we'll loop over the *second* generator, not the first
-          - As we loop over the second generator... it's going to loop over the first one to get the items it needs
-          - And as we loop over that... it's going to loop over that `range` object
-          - So we have an iterator wrapped in an iterator
+          - That iterator we had of squares of numbers... **(click)**
+          - We could take that and wrap *another* generator expression around it **(click)**
+          - This second generator expression is filtering down the squares so that we only have the ones where **(click)** if you reversed their digits, they'd be the same number
+          - When we end up finally looping **(click)**, to do a bit more filtering **(click)** and then print out the numbers...
+          - ...we'll loop over the *second* generator **(click)**, not the first
+          - As we loop over the second generator... it's going to loop over the first one **(click)** to get the items it needs
+          - And as we loop over that... it's going to loop over **(click)** that `range` object
+          - So we have **(click)** an iterator wrapped in another iterator
           - Let's look at a slightly more realistic example of iterators wrapped in iterators...
         </aside>
       </section>
@@ -605,17 +617,16 @@ total = sum(squares)
     <span class="fragment fade-out" data-fragment-index=18>)</span></span></span><span class="fragment" data-fragment-index=10>)</span><span class="fragment" data-fragment-index=16></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - We're going to read a CSV file of business expenses...
-          - We'll import Python's `csv` module to help us parse it
-          - At this point we have a file object, which is an iterator, and we pass it to `csv.reader`, which is also going to return an iterator... so no looping has happened yet
-          - We're going to take this `expenses_row` iterator...
-          - And wrap a generator expression around it
-          - This generator will unpack the columns from each row, grab only the travel expense rows, and then take the cost and convert it a floating point number
-          - And then we'll take that whole generator expression, and pass it to the `sum` function
-          - So we have an iterator, wrapped in another iterator, wrapped in another iterator...
-          - And no looping happens until the `sum` function starts looping over that outermost iterator: that generator expression that we pass to it
-          - By the way... passing a generator expression straight into another function, like that `sum` function, is such a common thing to do, that the Python core developers made it so we can drop that extra set of parenthesis, kind of visually merging the generator expression with the function call
-          - TODO have slide after this talking about how it's hard to make a good analogy about how iterators work but that they're similarity matroyshka dolls or to Unix pipes or ... a sort of lazy looping pipeline
+          - We're going to read a CSV file of business expenses... **(click)**
+          - We'll use Python's **(click)** `csv` module to help us parse it **(click)**
+          - Now we have a file object **(click)** (which is an iterator) and we've passed it to `csv.reader` **(click)**, which is also going to return an iterator...
+          - We're going to take that `expenses_row` iterator, and wrap **(click)** a generator expression around it
+          - This generator will **(click)** unpack the columns from each row, grab only **(click)** the travel expense rows, and then take **(click)** the cost and convert it a floating point number
+          - And then we'll take that whole generator expression, and pass it to **(click)** the `sum` function
+          - So we have an iterator **(click)**, wrapped in another iterator **(click)**, wrapped in another iterator... **(click)**
+          - And no looping happens until the `sum` function **(click)** starts looping over that outermost iterator: that generator expression that we pass to it **(click)**
+          - By the way... passing a generator expression straight into another function, like that `sum` function, is such a common thing to do, that the Python core developers made it so we can drop that extra set of parenthesis **(click)**, kind of visually merging the generator expression with the function call
+          - TODO have slide after this talking about how it's hard to make a good analogy about how iterators work but that they're similarity Unix pipes or matroyshka dolls or maybe they're most similar to recursive xenomorphs, where each one is wrapped by another one and when you loop over the outside one it'll ask for an item from the inside one and it'll loop over whatever it's looping over, and so on...
         </aside>
       </section>
 
@@ -637,20 +648,19 @@ total = sum(squares)
           </li>
         </ol>
         <aside class="notes" data-markdown>
-          - TODO before this show heads inside heads inside heads image or dolls inside dolls or something
           - So there are two general things you can *do* with an iterator...
-          - You can wrap another iterator around them, that does a little bit more work incrementally
-          - And you can do that as many times as you'd like
-          - But the one thing you'll always end up doing with the outermost iterator... is looping over it
-          - ... But only once. Because once you've looped all the way through an iterator, it's exhausted
-          - There are 3 ways to wrap around an iterator...
-          - You can either write a generator function that you'll pass your iterator to
-          - Or you can write a generator expression that you'll use to loop over it
-          - Or you can call some other function that'll accept an iterator, do some work, and return another iterator... like the `csv.reader` function or the built-in `enumerate` function do
-          - There are also a couple ways ways to loop over iterator...
-          - The obvious way is to write a `for` loop
-          - But you could also write a list comprehension
-          - Or call some other function that'll do the looping for you... like the `sum` function
+          - You can **(click)** wrap another iterator around them, which will do a little bit more work incrementally
+          - And you can do that as many times as you'd like.
+          - But the one thing you'll always end up doing with the outermost iterator... is loop over it **(click)**
+          - ... But only once. **(click)** Because once you've looped all the way through an iterator, it's exhausted
+          - There are 3 ways to wrap around an iterator... **(click)**
+          - You can either write a generator function **(click)** that you'll pass your iterator to
+          - Or you can write a generator expression **(click)** that you'll use to loop over it
+          - Or you can call some other function that'll accept an iterator **(click)**, do some work, and return another iterator... like the `csv.reader` function or the built-in `enumerate` function do
+          - There are also a couple ways ways to loop over iterator... **(click)**
+          - The obvious way is to write a `for` loop **(click)**
+          - But you could also write a list comprehension **(click)**
+          - Or... you call some other function that'll do the looping for you... **(click)** like the `sum` function
         </aside>
       </section>
 
@@ -664,7 +674,7 @@ total = sum(squares)
           - So we can write our own generators to help us process iterables in steps as we loop over them...
           - And we can make as many steps as we'd like before we end up looping, but wrapping iterators in iterators
           - But while you're figuring out how to accomplish your iterator-wrapping goals, keep in mind that the best generators... are the ones you don't even have to write...
-          - Fortunately there are *a lot* of tools built-in to Python and in third party libraries that can help us in writing our lazy looping code
+          - Fortunately there are *a lot* of **(click)** tools built-in to Python and in third party libraries that can help us in writing our lazy looping code
           - TODO discuss how this applies to Django querysets... useful for processing querysets without taking up lots of memory but also discuss iterator() method (iterator method: Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
         </aside>
       </section>
@@ -680,9 +690,8 @@ total = sum(squares)
 <span class="fragment">3 purple</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO better speaker notes: we've already seen enumerate!
-          - So we've already seen the built-in `enumerate` function
-          - This function takes an iterable and returns an iterator which yields tuples containing each of the items in the original iterable along with a number, starting at 0 by default
+          - So we've already seen the built-in `enumerate` function **(click)**
+          - It takes an iterable and returns an iterator which yields **(click)** tuples containing each of the items **(click)** in the original iterable along with a number **(click)**, starting at 0 by default
           - This isn't the only Python built-in that returns an iterator
           - There's also...
         </aside>
@@ -702,11 +711,11 @@ total = sum(squares)
 <span class="fragment">False</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - reversed.
-          - When you loop over reversed, you'll get all the items in the sequence you give to it, in reverse order.  This doesn't *accept* an iterator because they're not reversible, but it will return a lazy iterator to you
-          - There's also the `zip` function, which accepts any number of iterables and returns an iterator that, when you loop over it, will give you tuples of the corresponding items in each iterable
-          - There's also the `any` function which was pretty much invented with the idea that you'd always be passing a generator expression to it... it doesn't return an iterator, but instead returns either `True` if any of the values in the iterable given to it are truthy
-          - And the `all` function is the other side of `any`: it returns `True` only if all of the items are truthy, and `False` if any of them aren't
+          - reversed. **(click)**
+          - When you loop over reversed, you'll get all the items in the sequence you give to it, in reverse order. **(click)**  This doesn't *accept* an iterator because they're not reversible, but it will return a lazy iterator to you
+          - There's also the `zip` function **(click)**, which accepts any number of iterables and returns an iterator that, when you loop over it, will give you **(click)** tuples of the corresponding items in each iterable
+          - There's also the **(click)** `any` function which was pretty much invented with the idea that you'd always be passing a generator expression to it... it doesn't return an iterator, but instead returns either **(click)** `True` if any of the values in the iterable given to it are truthy
+          - And the **(click)** `all` function is the other side of `any`: it returns `True` only if all of the items are truthy, and **(click)** `False` if any of them aren't
           - These are not the only Python built-ins that play nicely in iterator land, but these are some of the most common ones
           - There are two that you might see which I'd personally discourage you from using...
         </aside>
@@ -727,12 +736,12 @@ total = sum(squares)
 
         </code></pre>
         <aside class="notes" data-markdown>
-          - The `map` function...
-          - Which returns an iterator that will evaluate a function over every item in iterable and give you the return values back
-          - I don't use this function often because I usually prefer to write a generator expression that does the same thing
-          - The `filter` function I also don't use much
-          - It gives you just the values that pass a certain condition
-          - And it's pretty much the same as a generator expression with a condition on it
+          - The `map` function... **(click)**
+          - Which returns an iterator that will evaluate a function over every item in iterable and give you the return values back **(click)**
+          - I don't use this function often because I usually prefer to write **(click)** a generator expression that does the same thing **(click)**
+          - The `filter` function I also don't use much **(click)**
+          - It gives you just the values that pass a certain condition **(click)**
+          - And it's pretty much the same as **(click)** a generator expression with a condition on it **(click)**
           - Which I usually find more readable
           - Moving away from the Python built-ins...
         </aside>
@@ -742,7 +751,7 @@ total = sum(squares)
         <h3 class="fragment">itertools</h3>
         <aside class="notes" data-markdown>
           - ...There are also a lot of iterator helpers in the standard library...
-          - A lot of them live in the itertools module
+          - A lot of them live in the **(click)** itertools module
         </aside>
       </section>
 
@@ -750,32 +759,36 @@ total = sum(squares)
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
 >>> colors = ['pink', 'green', 'purple', 'blue']
 >>> numbers = [2, 1, 3, 4, 7]
->>> <span class="fragment" data-fragment-index=2>from itertools import chain<span class="fragment" data-fragment-index=5>, zip_longest</span><span class="fragment" data-fragment-index=8>, islice</span><span class="fragment" data-fragment-index=14>, takewhile</span></span>
+>>> <span class="fragment" data-fragment-index=2>from itertools import chain<span class="fragment" data-fragment-index=5>, zip_longest</span><span class="fragment" data-fragment-index=8>, islice</span><span class="fragment" data-fragment-index=16>, takewhile</span></span>
 >>> </span><span class="fragment" data-fragment-index=3>list(chain.from_iterable(zip(numbers, colors)))
 </span><span class="fragment" data-fragment-index=4>[2, 'pink', 1, 'green', 3, 'purple', 4, 'blue']
 >>> </span><span class="fragment" data-fragment-index=6>list(zip_longest(numbers, colors, fillvalue=''))
 </span><span class="fragment" data-fragment-index=7>[(2, 'pink'), (1, 'green'), (3, 'purple'), (4, 'blue'), (7, '')]
 >>> </span><span class="fragment" data-fragment-index=9>squares = (n**2 for n in numbers)
->>> </span><span class="fragment" data-fragment-index=10>list(islice(squares, 3))
-</span><span class="fragment" data-fragment-index=11>[4, 1, 9]
->>> </span><span class="fragment" data-fragment-index=12>list(squares)
-</span><span class="fragment" data-fragment-index=13>[16, 49]
->>> </span><span class="fragment" data-fragment-index=15>list(takewhile(lambda c: len(c) <= 5, colors))
-</span><span class="fragment" data-fragment-index=16>['pink', 'green']</span>
+>>> </span><span class="fragment" data-fragment-index=10>squares[:3]</span><span class="fragment" data-fragment-index=11>
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: 'generator' object is not subscriptable
+>>> </span><span class="fragment" data-fragment-index=12>list(islice(squares, 3))
+</span><span class="fragment" data-fragment-index=13>[4, 1, 9]
+>>> </span><span class="fragment" data-fragment-index=14>list(squares)
+</span><span class="fragment" data-fragment-index=15>[16, 49]
+>>> </span><span class="fragment" data-fragment-index=17>list(takewhile(lambda c: len(c) <= 5, colors))
+</span><span class="fragment" data-fragment-index=18>['pink', 'green']</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - There's chain, which has a `from_iterable` attribute which is useful for flattening an iterable of iterables one level deep...
+          - There's chain **(click)**, which has a `from_iterable` attribute **(click)** which is useful for flattening an iterable of iterables one level deep... **(click)**
           - So when we saw before that `zip` gave us a list of tuples... `chain.from_iterable` gives us a list with the tuples unpacked into individual items
-          - Also in itertools, and related to zip, there's `zip_longest`...
-          - The `zip_longest` function works kind of like `zip`, except it stops and the longest iterable, not the shortest one
-          - There's also `islice`, which solves a very specific problem...
-          - If you have an iterator, say this `squares` generator object...
-          - And you try to slice it to grab the first 3 items, you'll get an error (TODO show slicing failing)
+          - Also in itertools, and related to zip, there's `zip_longest`... **(click)**
+          - The `zip_longest` function works kind of like `zip` **(click)**, except it stops at the **(click)** longest iterable, not the shortest one
+          - There's also `islice` **(click)**, which solves a very specific problem...
+          - If you have an iterator, say this `squares` generator object... **(click)**
+          - And you try to slice it to grab the first 3 items **(click)**, you'll get an error **(click)**
           - Because you can't slice iterators: the only thing you can do with them is loop over them
-          - So `islice` is handy for grabbing the first `n` values from an iterator and then stopping
-          - So if kept looping after using `islice`, we'd see the iterator wasn't fully exhausted
-          - One of my favorite things in itertools, which I don't see used often, is `takewhile`
-          - `takewhile` accepts a condition and an iterable and it'll give give you all the items in that iterable until that condition is False for one of the items
+          - So `islice` **(click)** is handy for grabbing the first `n` values from an iterator and then stopping **(click)**
+          - So if kept looping after using `islice` **(click)**, we'd see the iterator wasn't fully exhausted **(click)**
+          - One of my favorite things in itertools, which I don't see used often, is `takewhile` **(click)**
+          - `takewhile` accepts **(click)** a condition and an iterable and it'll give give you all the items in that iterable until that condition is False for one of the items **(click)**
           - So here we're asking for colors with a length less than 5... it stops just before purple because it has a length greater than 4... so we never even get to blue
           - You can think of `takewhile` as an alternative to writing a `for` loop with a `break` statement in it
           <!--
@@ -792,9 +805,9 @@ total = sum(squares)
         <h3 class="fragment">boltons<span class="fragment">.iterutils</span></h3>
         <aside class="notes" data-markdown>
           - There are also a number of third-party libraries that try to augment the functions that are in the itertools module
-          - One of them is just called more-itertools
-          - And another one is called `boltons`
-          - We're going to look at a submodule of `boltons` called `iterutils`, which is is full of tools for helping you iterate, both lazily and otherwise
+          - One of them is just called more-itertools **(click)**
+          - And another one is called `boltons` **(click)** which has a submodule called **(click)** `iterutils` which is full of tools for helping you iterate lazily
+          - We're going to look at some examples using `boltons.iterutils`
         </aside>
       </section>
 
@@ -810,8 +823,8 @@ with open('logs.txt') as log_file:
         <aside class="notes" data-markdown>
           - One of the boltons.itertools functions is called chunked_iter
           - It'll help you you loop over an iterable n items at a time
-          - So here we're looping over a file, 100 lines at a time
-          - And we're prompting the user in-between to ask if they'd like to see more lines
+          - So here we're looping over a file, 100 lines at a time **(click)**
+          - And we're **(click)** prompting the user in-between to ask if they'd like to see more lines
           - Another tool from boltons is...
         </aside>
       </section>
@@ -828,11 +841,24 @@ with open('writing.txt') as text_file:
         <aside class="notes" data-markdown>
           - `split_iter`, which is 
           - `split_iter` also allows you to loop over items in groups, but instead of grouping by the number of items it splits up the groups based on delimiter values you give it
-          - So here we're looping paragraph-by-paragraph, because our delimiter is a line with single newline character, which is an empty line
+          - So here we're looping paragraph-by-paragraph **(click)**, because our delimiter is a line with single newline character **(click)**, which is an empty line
         </aside>
       </section>
 
-      <!-- TODO slide here with built-ins, itertools, third-party libraries like more-itertools or boltons -->
+      <section>
+        <h3>Iterator utility functions</h3>
+        <ul>
+          <li class="fragment">Python built-ins like enumerate and zip</li>
+          <li class="fragment">Various in the itertools module</li>
+          <li class="fragment">Iteration helpers in third-party libraries like boltons or more-itertools</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - So when you're practicing lazy looping, keep an eye out for tools that can help you accomplish your goals without writing lots of code
+          - There's a lot of lazy looping in the Python built-ins 
+          - And the itertools module in the Python standard library has a bunch of great stuff for working with iterators
+          - And third-party libraries like more-itertools and boltons have even more lazy looping helpers...
+        </aside>
+      </section>
 
       </section>
 
@@ -843,7 +869,7 @@ with open('writing.txt') as text_file:
         <h3 class="fragment">Find first 10 errors from yesterday</h3>
         <aside class="notes" data-markdown>
           - Let's finally revisit the first problem we saw at the beginning of this talk
-          - That was some code that looped over a log file to find the first 10 errors that occurred yesterday
+          - That was some code that **(click)** looped over a log file to find the first 10 errors that occurred yesterday
         </aside>
       </section>
 
@@ -868,7 +894,7 @@ with open('log.txt') as log_file:
                 break
         </code></pre>
         <aside class="notes" data-markdown>
-          - You can see we're counting upward as we work with lines in this file
+          - You can see we're counting upward **(click)** as we work with lines in this file
           - Often we can use `enumerate` to count upward for us, but we can't do that here because we only care about *some* of the lines: just the ones with errors from yesterday
           - If we could make a lazy iterable out of *just* those lines, we could reach for `enumerate` to count for us
           - We can do that...
@@ -896,14 +922,14 @@ with open('log.txt') as log_file:
         print('[...]')</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - By making a generator expression...
+          - By making a generator expression... **(click)**
           - Which will eventually loop over our file line-by-line
-          - And filtering our lines down...
-          - ...to just the ones we care about: the error lines
-          - After that we've got a lazy iterable, a generator, that we could pass to `enumerate`, and then loop over
+          - And filtering our lines down... **(click)**
+          - ...to just the ones we care about: the error lines **(click)**
+          - After that we've got a lazy iterable, a generator, that we could pass to `enumerate` **(click)**, and then loop over
           - This way we can break on the tenth line
-          - And if there's another line left, we'll print out those ellipsis to signify that there are even more lines after those 10
-          - You might might also notice that this loop here is really asking a specific question: it's looking for *just the first 10 lines* in our iterator
+          - And if there's another line left **(click)**, we'll print out those ellipsis to signify that there are even more lines after those 10
+          - You might might also notice that **(click)** this loop here is really asking a specific question: it's looking for *just the first 10 lines* in our iterator
           - We can do the same thing with `islice` from Python's `itertools` module
         </aside>
       </section>
@@ -931,8 +957,8 @@ with open('log.txt') as log_file:
 
         </code></pre>
         <aside class="notes" data-markdown>
-          - I find this more readable than what we started with...
-          - Regardless of whether you find it more readable to break this particular big loop into smaller lazies loops, you should try this process out yourself on your own code
+          - I find this more readable than what we started with... **(click)**
+          - Regardless of whether you find this lazy looping approach more readable to break this particular big loop into smaller lazies loops, you should try this process out yourself on your own code
           - You can write loops as one big piece, as lots of little iterators wrapper around each other, or as something in-between: it's up to you
           - ...
           - TODO transition into problem 2
@@ -960,7 +986,8 @@ with open('log.txt') as log_file:
         </span></code></pre>
         <aside class="notes" data-markdown>
           - But you may not...
-          - *(click to go back)*
+          - You may find this more readable... and that's okay.
+          - **(click to go back)**
         </aside>
       </section>
 
@@ -972,7 +999,7 @@ with open('log.txt') as log_file:
         <h2>Problem 2: Revisited</h2>
         <h3 class="fragment">Find logged errors (with context)</h3>
         <aside class="notes" data-markdown>
-          - So problem 2 was finding error lines in addition to the line just before the error and the line just after the error
+          - So problem 2 was finding error lines in addition to **(click)** the line just before the error and the line just after the error
         </aside>
       </section>
 
@@ -990,21 +1017,21 @@ with open('logs.txt') as log_file:
         </code></pre>
         <aside class="notes" data-markdown>
           - This was our code for this...
-          - We're looping over a file here...
-          - And keeping track of the previous, current, and next line
-          - Removing newlines from our lines
-          - Making sure we're on an error line
-          - And if we are, we print out the previous, current, and next line
-          - And then afterward we have to check whether the last line also had an error... because the logic to keep track of the previous, current, and next line kind of required that
-          - ...
+          - We're looping over a file here... **(click)**
+          - And keeping track of the previous, current, and next line **(click)**
+          - Removing newlines from our lines **(click)**
+          - Making sure we're on an error line **(click)**
+          - And if we are, we print out the previous, current, and next line **(click)**
+          - And then afterward **(click)** we have to check whether the last line also had an error... because the logic to keep track of the previous, current, and next line kind of required that
+          - ... **(click)**
           - This is complicated
           - We're going to start with a very small change...
-          - Taking this newline stripping, and moving that into its iterator...
+          - Taking this newline stripping **(click)**, and moving that step into a generator function...
         </aside>
       </section>
 
       <section>
-        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+        <pre class="python" data-fragment-index=1><code data-trim data-noescape>
 def strip_newlines(lines):
     for line in lines:
         yield line.rstrip('\n')
@@ -1020,10 +1047,11 @@ with open('logs.txt') as log_file:
         print(<span class="fragment bold-current" data-fragment-index=4>prev</span>, line, sep='\n')
         </code></pre>
         <aside class="notes" data-markdown>
-          - This `strip_newlines` generator function...
-          - Then we can modify our code to wrap our file object in this `strip_newlines` generator function, wrapping one iterator in another iterator, that does a little bit of work as we loop over it...
+          - This `strip_newlines` generator function.
+          - ...
+          - Now that we have this generator function, we can modify our code **(click)** to wrap our file object **(click)** in this `strip_newlines` generator function, wrapping one iterator in another iterator, that does a little bit of work as we loop over it...
           - This didn't really help much, but it's going to allow us to simplify even more things
-          - The next thing we'll simplify will be all of this "previous, current, next line"-handling logic
+          - The next thing we'll simplify will be all of this **(click)** "previous, current, next line"-handling logic
           - We'll make a generator function, that will take our lines and yield out the line before each one and the line after each one
         </aside>
       </section>
@@ -1048,13 +1076,13 @@ with open('logs.txt') as log_file:
         </code></pre><span class="fragment" data-fragment-index=10></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - This `around` generator function yields out the previous, current, and next line over and over
-          - And handles that special case for the last line, the same way we did before
-          - This function isn't pretty, but *using it* will make our `for` loop a lot more readable
-          - We're now taking a file object, which is an iterator...
-          - And wrapping that in our `strip_newlines` generator function, which also returns an iterator...
-          - And we're wrapping that iterator in our `around` generator function, which also returns an iterator...
-          - But no work will be done, until we start *looping* over that outer iterator
+          - This `around` generator function **(click)** yields out the previous, current, and next line over and over
+          - And handles that special case for the last line **(click)**, the same way we did before
+          - This function isn't pretty, but *using it* will make our `for` loop a lot more readable **(click)**
+          - We're now taking a file object, which is an iterator... **(click)**
+          - And wrapping that in our `strip_newlines` generator function **(click)**, which also returns an iterator...
+          - And we're wrapping that iterator in our `around` generator function **(click)**, which also returns an iterator...
+          - But no work will be done, until we start *looping* **(click)** over that outer iterator **(click)**
           - Python doesn't care if our log file is 10 lines or 10 million lines here: because these iterators are all lazy, we're always considering only 3 lines at a time... nothing else is stored in memory
           - ...So after all of this...
         </aside>
@@ -1180,46 +1208,79 @@ with open('logs.txt') as log_file:
           <span class="fragment" data-fragment-index=9></span>
         </ul>
         <aside class="notes" data-markdown>
-          - An **iterator** is a lazy single-use iterable that computes its *next* item and give it back to you as you loop over it
-          - A **generator function** is a special syntax that we can use for making a function which returns an iterator
-          - A **generator expression** is a special syntax, that looks like a list comprehension, and when you make one of these expressions you'll get an iterator back
-          - The type of iterator you get back from each of these is called a **generator object** or just **a generator**
-          - When you call a generator function or evaluate a generator expression, you *get* one of these generator objects
-          - And generator objects are a type of **iterator**... they're basically the *easiest way* to make an iterator
+          - An **iterator** is a **(click)** lazy single-use iterable that computes its *next* item and give it back to you as you loop over it
+          - **(click)** A **generator function** is a special syntax that we can use for making a function which returns an iterator
+          - **(click)** A **generator expression** is a special syntax, that looks like a list comprehension, and when you make one of these expressions you'll get an iterator back
+          - The type of iterator you get back from each of these is called **(click)** a **generator object** or just *a generator*. **(click)**
+          - When you call a generator function **(click)** or evaluate a generator expression **(click)**, you *get* one of these generator objects **(click)**
+          - And generator objects are a type **(click)** of **iterator**... they're basically the *easiest way* to make an iterator **(click)**
           - So that's how *I* define these terms...
-          - But the Python documentation disagrees with me
-          - Then apologize and note that the Python documentation calls these by different names, ones which I both disagree with and don't hear used quite as frequently by most Python programmers
+          - But the Python documentation disagrees with me...
         </aside>
       </section>
 
-      <section data-background="#ffffff">
+      <section data-background="#ffffff" data-transition="slide-in none-out">
         <table class="no-style no-padding top-aligned">
           <tbody>
             <tr>
-              <td class="fragment"><small><nobr><strong>generator function</strong></nobr></small></td>
-              <td class="fragment"><img src="generator-term.png" class="no-style"></td>
+              <td class="fragment" data-fragment-index=1><small><nobr><strong>generator function</strong></nobr></small></td>
+              <td class="fragment" data-fragment-index=2><img src="generator-term.png" class="no-style"></td>
             </tr>
             <tr>
-              <td class="fragment">
+              <td class="fragment" data-fragment-index=3>
                 <small><strong><nobr>generator object</nobr></small></strong>
-                <small class="fragment"><strong><nobr>generator</nobr></small></strong>
+                <small class="fragment" data-fragment-index=4><strong><nobr>generator</nobr></small></strong>
               </td>
-              <td class="fragment"><img src="generator-iterator-term.png" class="no-style"></td>
+              <td class="fragment" data-fragment-index=5><img src="generator-iterator-term.png" class="no-style"></td>
             </tr>
             <tr>
-              <td class="fragment"><small><strong><nobr>generator expression</nobr></strong></small></td>
-              <td class="fragment"><img src="generator-expression-term.png" class="no-style"></td>
+              <td class="fragment" data-fragment-index=6><small><strong><nobr>generator expression</nobr><br><nobr class="fragment" data-fragment-index=9>generator comprehension</nobr></strong></small></td>
+              <td class="fragment" data-fragment-index=8><img src="generator-expression-term.png" class="no-style"></td>
             </tr>
-            <tr class="fragment">
+            <tr class="fragment" data-fragment-index=10>
               <td colspan=2><small>"Calling a generator function returns a generator" - Luciano Ramalho in Fluent Python (page 429)</small></td>
             </tr>
           </tbody>
         </table>
         <aside class="notes" data-markdown>
-          - TODO that word "generator" is the ambiguous one
-            - I've never heard anyone actually *use* the phrase generator iterator outside of the Python documentation, though I *have* heard people refer to generator functions as *generators*
-          - TODO maybe talk about how when we have an object of type list I refer to that as "a list" and an object of type function I refer to as a "function"
-          - TODO Luciano in Fluent Python (page 429): "Calling a generator function returns a generator."
+          - What I call a *generator function* **(click)**, it calls a *generator* **(click)**
+          - And what I call a *generator object* **(click)** or just a *generator* **(click)**, it calls a *generator iterator* **(click)**... which isn't a term I've ever heard anyone *use* outside of the Python documentation
+          - Fortunately generator expression **(click)** is unambiguous **(click)**, even though I do sometimes wish they were called generator comprehensions **(click)**
+          - So you might think: Trey thinks one thing and the Python documentation says something else, so obviously Trey is wrong.
+          - And I might agree with you, except that I'm not alone in the way I use these terms
+          - Many other Python educators **(click)** use the term "generator" the same way I do
+          - Lots of people use the term "generator" to refer to a generator object and "generator function" to refer to the function itself
+          - In fact...
+        </aside>
+      </section>
+
+      <section data-background="#ffffff" data-transition="none-in slide-out">
+        <table class="no-style no-padding top-aligned">
+          <tbody>
+            <tr>
+              <td><small><nobr><strong>generator function</strong></nobr></small></td>
+              <td><img src="generator-term-highlighted.png" class="no-style"></td>
+            </tr>
+            <tr>
+              <td>
+                <small><strong><nobr>generator object</nobr></small></strong>
+                <small><strong><nobr>generator</nobr></small></strong>
+              </td>
+              <td><img src="generator-iterator-term.png" class="no-style"></td>
+            </tr>
+            <tr>
+              <td><small><strong><nobr>generator expression</nobr><br><nobr>generator comprehension</nobr></strong></small></td>
+              <td><img src="generator-expression-term.png" class="no-style"></td>
+            </tr>
+            <tr>
+              <td colspan=2><small>"Calling a generator function returns a generator" - Luciano Ramalho in Fluent Python (page 429)</small></td>
+            </tr>
+          </tbody>
+        </table>
+        <aside class="notes" data-markdown>
+          - ...the Python documentation says the term generator "may be used to refer to a generator iterator in some contexts"
+          - ...
+          - So these terms are confusing, different people use them differently in different contexts, and I guess that's the way life is generator land
         </aside>
       </section>
 
@@ -1233,6 +1294,7 @@ with open('logs.txt') as log_file:
           <li class="fragment">Know how to use iteration helpers<span class="fragment">, where to find them</span><span class="fragment">, and how to make your own using generators</span></li>
         </ul>
         <aside class="notes" data-markdown>
+          - TODO
           - Regardless of whether you're inventing your own iteration helpers or reaching for helpers written by others, using iteration helpers can really improve the readability of your code **(click)**
           - It's similar to splitting one big function up into a couple little functions
           - But instead we're using iterators generator functions to move *generic* logic outside of your loops, to make our loops cleaner and easier to understand
@@ -1240,13 +1302,6 @@ with open('logs.txt') as log_file:
           - So learn how to *use* iteration helpers **(click)**
           - ...where to *find* iteration helpers within Python itself and in third-party libraries **(click)**
           - ...and how to write your own helpers with generator functions and generator expressions **(click)**
-
-          - TODO Maybe a table showing helpers and their use
-            - Using with_previous/with_next/window/pairwise-like helpers to remove “side cars”
-            - Using any/all instead of early break/return (is_prime)
-            - Using dropwhile/takewhile instead of early break (trim function)
-            - Using next instead of an early return/break
-            - Using islice instead of manual loop-and-append-and-break or manual next-ing
           - Iterators allow for more descriptive code
         </aside>
       </section>
@@ -1304,6 +1359,18 @@ with open('logs.txt') as log_file:
           - Thank you
         </aside>
       </section>
+
+      <!--
+      <section>
+        <aside class="notes" data-markdown>
+          - generator functions are different from regular functions... regular functions can control what they return to you, whereas a generator function always returns a generator to you... but that generator is an iterator: a lazy iterable, and yield statements are the thing that control the laziness: the passing of a message back to the code that's looping over it
+          - unlike regular functions, generator functions are a very special purpose tool: they're specifically for making a function which returns a lazy iterable, an iterator, that can do work and then put itself on pause to give you its next item
+          - drive home the point: passing a 10GB log file to a generator function doesn't result in all the lines in that file being stored in memory... as we loop over the generator, it'll loop over lines our log file
+          - perfect place to use a generator is when you want to take some... (figure out the tweetable statement here)
+          - show trivial example (not <p> thing... that's too much) and show how we can make a generator function to move some of the logic out of it
+        </aside>
+      </section>
+      -->
 
       </div>
     </div>
