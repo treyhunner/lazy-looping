@@ -197,6 +197,7 @@ This is line 4 (the end of the file)
 []</span>
         </code></pre>
         <aside class="notes" data-markdown>
+          - TODO fix clicks on this slide
           - You can probably think of an example of an iterable: but iterators are a bit more mysterious
           - *This* is an iterator. **(click)** In Python, **file objects** *are iterators* **(click)**
           - I'm going to use this file to show you the two things that we can do with *all* iterators...
@@ -577,6 +578,7 @@ total = sum(squares)
         </aside>
       </section>
 
+      <!--
       <section>
         <h3>Wrapping iterators in iterators</h3>
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
@@ -603,10 +605,11 @@ total = sum(squares)
           - Let's look at a slightly more realistic example of iterators wrapped in iterators...
         </aside>
       </section>
+      -->
 
       <section>
         <h3>Wrapping iterators in iterators</h3>
-        <pre class="python"><code data-trim data-noescape>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
 <span class="fragment" data-fragment-index=2>import csv
 </span><span class="fragment" data-fragment-index=1>with open('expenses.csv') as expenses_file:</span><span class="fragment" data-fragment-index=3>
     <span class="fragment bold-current" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=14>expense_rows</span></span> = <span class="fragment bold-current" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=13>csv.reader</span></span>(<span class="fragment bold-current" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=12>expenses_file</span></span>)</span>
@@ -617,6 +620,8 @@ total = sum(squares)
     <span class="fragment fade-out" data-fragment-index=18>)</span></span></span><span class="fragment" data-fragment-index=10>)</span><span class="fragment" data-fragment-index=16></span>
         </code></pre>
         <aside class="notes" data-markdown>
+          - We can wrap it in another iterator...
+          - Let's write some code that adds up travel expenses.
           - We're going to read a CSV file of business expenses... **(click)**
           - We'll use Python's **(click)** `csv` module to help us parse it **(click)**
           - Now we have a file object **(click)** (which is an iterator) and we've passed it to `csv.reader` **(click)**, which is also going to return an iterator...
@@ -1295,14 +1300,13 @@ with open('logs.txt') as log_file:
         </ul>
         <aside class="notes" data-markdown>
           - TODO
-          - Regardless of whether you're inventing your own iteration helpers or reaching for helpers written by others, using iteration helpers can really improve the readability of your code **(click)**
-          - It's similar to splitting one big function up into a couple little functions
-          - But instead we're using iterators generator functions to move *generic* logic outside of your loops, to make our loops cleaner and easier to understand
-          - This can make our code more descriptive and easier to understand **(click)**
-          - So learn how to *use* iteration helpers **(click)**
-          - ...where to *find* iteration helpers within Python itself and in third-party libraries **(click)**
-          - ...and how to write your own helpers with generator functions and generator expressions **(click)**
-          - Iterators allow for more descriptive code
+            - iterators are lazy single-use iterables that compute their next item as you loop over them
+            - you "consume" items as you loop over an iterator and iterators are exhausted once they've been fully looped over
+            - making generators (by writing generator functions or generator expressions) is the easy way to make your own iterator
+            - Python comes bundled with lots of iterator tools in the built-ins and in the itertools module and there are some great third party libraries with even more tools for you to use
+            - wrapping iterators in iterators is a way to make a sort of simple data processing pipeline where each iterator does a little bit of work which gets sent to the next iterator wapping around it
+            - iterators allow you to sort of turn your loops inside-out by breaking your work up into chunks that you can give descriptive names to which can make for more readable code
+            - you might not need to care about iterators today, but you'll probably want to know about these at some point: especially if you ever have big loops that process lots of data
         </aside>
       </section>
 
