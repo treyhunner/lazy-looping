@@ -280,17 +280,10 @@ This is line 4 (the end of the file)
         <h2>How do you create iterators?</h2>
         <aside class="notes" data-markdown>
           - How do we create iterators?
-          - TODO instead of this section do:
-            - show a simple function which does a thing and returns a list
-            - quickly refactor the function to be a generator function
-            - say that as you loop over generators they'll do work, put themselves on pause to give you a value, and then start up again when you ask them for another value
-            - show putting prints in the function and looping over it
-            - there's a more complex way to make iterators that involves making your own class, but generator functions are the *easy* way for us to make an iterator... but there's actually an even easier way
-            - show the same thing with a generator expression instead
-            - show the terminology slide and then say "so we know how to create iterators by making generators now, but how can we use them?" and then transition to next section
         </aside>
       </section>
 
+      <!--
       <section>
         <pre class="python"><code data-trim data-noescape>
 >>> <span class="fragment">e = enumerate(['one', 'two', 'three', 'four'])
@@ -321,23 +314,51 @@ This is line 4 (the end of the file)
           - Let's try to recreate this `enumerate` function...
         </aside>
       </section>
+      -->
 
       <section data-transition="slide-in fade-out">
         <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
-    <span class="fragment bold-current" data-fragment-index=1><span class="fragment fade-out" data-fragment-index=5>values = []</span></span>
+def denumerate(iterable):
+    n = -1
+    <span class="fragment bold-current" data-fragment-index=4>values = []</span>
     for item in iterable:
-        <span class="fragment bold-current" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=6>values.append((n, item))</span></span>
-        n += 1
-    <span class="fragment bold-current" data-fragment-index=2><span class="fragment fade-out" data-fragment-index=4>return values</span></span><span class="fragment" data-fragment-index=3></span>
+        <span class="fragment bold-current" data-fragment-index=4>values.append((n, item))</span>
+        n -= 1
+    <span class="fragment bold-current" data-fragment-index=5>return values</span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=0><code data-trim data-noescape>
+>>> colors = ['pink', 'green', 'purple', 'blue']
+>>> <span class="fragment" data-fragment-index=1>for n, color in <span class="fragment bold-current" data-fragment-index=1>denumerate(colors)</span></span><span class="fragment" data-fragment-index=2>:
+...     print(n, color)
+...</span>
+<span class="fragment" data-fragment-index=3>-1 pink
+-2 green
+-3 purple
+-4 blue</span><span class="fragment" data-fragment-index=6></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - This function is very similar to the built-in `enumerate` function... except there's *one big difference*: it's **not lazy**... by that I mean that it doesn't return an iterator
-          - Instead of computing items as we loop over it, it just **(click)** builds up a whole list of tuples right when we call it...
-          - And then **(click)** returns them to us
-          - We can make this function **(click)** into an iterator though...
-          - And we can do it by actually *removing* code from it
+          - This function is very similar to the built-in `enumerate` function, except that it counts downward instead of up
+          - So if we take an iterable, say a list of words **(click)** and pass it to this `denumerate` function **(click)**, and **(click)** loop over the result...
+          - We'll get two-item tuples of numbers (counting downward) **(click)** and the actual items in the original iterable
+          - When we call this `denumerate` function it **(click)** builds up a list of all of the tuples it's going to give us and then **(click)** returns them them to us all at once
+          - **(click)** Instead of creating all the tuples right away...
+        </aside>
+      </section>
+
+      <section data-transition="slide-in fade-out">
+        <pre class="python"><code data-trim data-noescape>
+def denumerate(iterable):
+    n = -1
+    <span class="fragment fade-out" data-fragment-index=5>values = []</span>
+    for item in iterable:
+        <span class="fragment bold-current" data-fragment-index=6>values.append((n, item))</span>
+        n -= 1
+    <span class="fragment fade-out" data-fragment-index=4>return values</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - ...we can make this function return a lazy iterator to us...
+          - ...one which doesn't only *makes* each tuple just before we need it
+          - We can do this by actually *removing* code from this function
           - First we'll remove the `return` statement **(click)**
           - Then we'll remove the empty `values` list **(click)**
           - Then that `values.append` call **(click)** (which doesn't make any sense anymore)... it's going to turn into *a `yield` statement*
@@ -346,12 +367,12 @@ def enumerate(iterable, start=0):
 
       <section data-transition="fade-in fade-out">
         <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
+def denumerate(iterable):
+    n = -1
 
     for item in iterable:
         yield (n, item)
-        n += 1<span>
+        n -= 1<span>
 
 </span>
         </code></pre>
@@ -363,29 +384,30 @@ def enumerate(iterable, start=0):
       <section data-transition="fade-in slide-out">
         <h3 class="fragment" data-fragment-index=0>Generator function</h3>
         <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
-    n = start
+def denumerate(iterable):
+    n = -1
     for item in iterable:
         <span class="fragment bold-current" data-fragment-index=6>yield (n, item)</span>
-        n += 1
+        n -= 1
         </code></pre>
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
->>> e = enumerate(['one', 'two', 'three', 'four'])
->>> <span class="fragment" data-fragment-index=2>next(e)
-(0, 'one')
+>>> colors = ['pink', 'green', 'purple', 'blue']
+>>> items = denumerate(colors)
+>>> <span class="fragment" data-fragment-index=2>next(items)
+(-1, 'pink')
 >>> </span><span class="fragment" data-fragment-index=3>list(e)
-[(1, 'two'), (2, 'three'), (3, 'four')]
+[(-2, 'green'), (-3, 'purple'), (-4, 'blue')]
 >>> </span><span class="fragment" data-fragment-index=4>list(e)</span>
 <span class="fragment" data-fragment-index=5>[]</span>
         </code></pre>
         <aside class="notes" data-markdown>
           - ... is called a *generator function* **(click)**
           - Generator functions return iterators when you call them
-          - So when we **(click)** call this `enumerate` function we've just made... we can take the thing we get back from it and
+          - So when we **(click)** call this `denumerate` function we've just made... we can take the thing we get back from it and
             - call `next` on it **(click)**
             - And we can loop over it **(click)**
             - And if we loop over twice **(click)**, it'll be empty the second time **(click)**
-            - Because our generator function returned **an iterator** to us: just the like Python's built-in `enumerate` function does
+            - Because our generator function returned **an iterator** to us
           - That `yield` statement **(click)** turned what was a **regular function** into a **generator function**
           - And generator functions are pretty different from normal functions
         </aside>
@@ -397,12 +419,12 @@ def enumerate(iterable, start=0):
     print('Start!')
     return 5
 </span>
-<span class="fragment" data-fragment-index=8>def enumerate(iterable, start=0):
+<span class="fragment" data-fragment-index=8>def denumerate(iterable):
     print('Start?')
-    n = 1
+    n = -1
     for item in iterable:
         <span class="fragment bold-current" data-fragment-index=13>yield (n, item)</span>
-        n += 1
+        n -= 1
 </span>
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
@@ -410,9 +432,9 @@ def enumerate(iterable, start=0):
 <span class="fragment" data-fragment-index=4>Start!
 >>> </span><span class="fragment" data-fragment-index=5>x
 </span><span class="fragment" data-fragment-index=6>5
->>> </span><span class="fragment" data-fragment-index=9>y = enumerate(["purple", "blue", "pink"])</span><span class="fragment" data-fragment-index=10>
+>>> </span><span class="fragment" data-fragment-index=9>y = denumerate(["purple", "blue", "pink"])</span><span class="fragment" data-fragment-index=10>
 >>> </span><span class="fragment" data-fragment-index=11>y
-</span><span class="fragment" data-fragment-index=12>&lt;generator object enumerate at 0x7febbdeaae58></span>
+</span><span class="fragment" data-fragment-index=12>&lt;generator object denumerate at 0x7febbdeaae58></span>
         </code></pre>
         <aside class="notes" data-markdown>
           - If you have **(click)** a regular function in Python...
@@ -434,33 +456,33 @@ def enumerate(iterable, start=0):
 
       <section>
         <pre class="python"><code data-trim data-noescape>
-def enumerate(iterable, start=0):
+def denumerate(iterable):
     <span class="fragment bold-current" data-fragment-index=1>print('start!')</span>
-    n = start
+    n = -1
     <span class="fragment bold-current" data-fragment-index=10><span class="fragment bold-current" data-fragment-index=19>for item in iterable</span>:
         <span class="fragment bold-current" data-fragment-index=1>print('about to yield')</span></span>
         <span class="fragment bold-current" data-fragment-index=12><span class="fragment bold-current" data-fragment-index=3>yield (n, item)</span></span>
         <span class="fragment bold-current" data-fragment-index=17><span class="fragment bold-current" data-fragment-index=8>print('incrementing!')</span></span>
-        n += 1
+        n -= 1
     <span class="fragment bold-current" data-fragment-index=20>print('all done!')</span>
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment" data-fragment-index=0>for <span class="fragment bold-current" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=13>n, color</span></span> in <span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=7>enumerate(["purple", "pink"])</span></span>:
+>>> <span class="fragment" data-fragment-index=0>for <span class="fragment bold-current" data-fragment-index=4><span class="fragment bold-current" data-fragment-index=13>n, color</span></span> in <span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=7>denumerate(["purple", "pink"])</span></span>:
 ...     <span class="fragment bold-current" data-fragment-index=14><span class="fragment bold-current" data-fragment-index=5>print(f"Color {n} is {color}")</span></span>
 ...</span>
 <span class="fragment" data-fragment-index=2>start!
 about to yield</span>
-<span class="fragment" data-fragment-index=6>Color 0 is purple</span>
+<span class="fragment" data-fragment-index=6>Color -1 is purple</span>
 <span class="fragment" data-fragment-index=9>incrementing</span>
 <span class="fragment" data-fragment-index=11>about to yield</span>
-<span class="fragment" data-fragment-index=15>Color 1 is pink</span>
+<span class="fragment" data-fragment-index=15>Color -2 is pink</span>
 <span class="fragment" data-fragment-index=18>incrementing</span>
 <span class="fragment" data-fragment-index=21>all done!</span>
         </code></pre>
         <aside class="notes" data-markdown>
           - To explain how generator functions *work* we're going to loop over a generator object and walk through every step of what our code does along the way...
           - This is going to be quick so if you've been asleep up to this point, maybe wake up for a minute or so
-          - When we loop over the generator object **(click)**  we get back from our custom `enumerate` generator function...
+          - When we loop over the generator object **(click)**  we get back from our custom `denumerate` generator function...
           - It's going to start executing our function
           - So we'll see **(click)** those first couple print calls happen **(click)**
           - And then Python gets to **(click)** the `yield` statement and it puts the generator on pause and yields control back to our loop: passing that tuple back to us **(click)**
@@ -516,6 +538,7 @@ about to yield</span>
 <span class="fragment bold-current" data-fragment-index=12>&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span></span><span class="fragment" data-fragment-index=16></span>
         </code></pre>
         <aside class="notes" data-markdown>
+          - TODO
           - Generator functions return generators to us and generators are iterators
           - *This* **(click)** is a generator function.
           - And **(click)** if we call this generator function... **(click)**
@@ -530,6 +553,41 @@ about to yield</span>
           - So instead of making a whole function that you need to call to make an iterator, sometimes **(click)** you can just write a single expression
         </aside>
       </section>
+
+      <!--
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+>>> <span class="fragment bold-current" data-fragment-index=15>def square_all(numbers):
+...     for n in numbers:
+...         yield n**2</span>
+...
+>>> <span class="fragment" data-fragment-index=2>numbers = [2, 1, 3, 4, 7, 11]
+>>> </span><span class="fragment" data-fragment-index=3>squares = square_all(numbers)
+>>> </span><span class="fragment" data-fragment-index=4>squares</span>
+<span class="fragment" data-fragment-index=5><span class="fragment bold-current" data-fragment-index=14>&lt;generator object square_all at 0x7f11191b78b8></span>
+>>> </span><span class="fragment" data-fragment-index=6><span class="fragment bold-current" data-fragment-index=16><span class="fragment bold-current" data-fragment-index=13>squares = (n**2 for n in numbers)</span></span>
+>>> </span><span class="fragment" data-fragment-index=7>squares_list = [n**2 for n in numbers]
+>>> </span><span class="fragment" data-fragment-index=8>squares_list
+</span><span class="fragment" data-fragment-index=9>[4, 1, 9, 16, 49, 121]
+>>> </span><span class="fragment" data-fragment-index=10>squares</span><span class="fragment" data-fragment-index=11>
+<span class="fragment bold-current" data-fragment-index=12>&lt;generator object &lt;genexpr> at 0x7f78f87af0c0></span></span><span class="fragment" data-fragment-index=16></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Generator functions return generators to us and generators are iterators
+          - *This* **(click)** is a generator function.
+          - And **(click)** if we call this generator function... **(click)**
+          - The thing we'll get back... **(click)**
+          - Is a generator object **(click)**
+          - But... this isn't the only way to make generator objects
+          - *This* **(click)** is a generator expression
+          - It *looks* like a list comprehension **(click)**
+          - Except list comprehensions **(click)** make new lists **(click)**
+          - But generator expressions **(click)** make new *generators* **(click)**
+          - *This* generator object **(click)** from this generator expression **(click)** does the same thing as this generator object **(click)** from this generator function **(click)**
+          - So instead of making a whole function that you need to call to make an iterator, sometimes **(click)** you can just write a single expression
+        </aside>
+      </section>
+      -->
 
       <section>
         <h3>How to make iterators</h3>
@@ -643,7 +701,32 @@ total = sum(n**2 for n in range(1000))
           - So we have an iterator **(click)**, wrapped in another iterator **(click)**, wrapped in another iterator... **(click)**
           - And no looping happens until the `sum` function **(click)** starts looping over that outermost iterator: that generator expression that we pass to it **(click)**
           - And again, because we're passing a generator expression straight into another function, we can **(click)** drop that extra set of parentheses
-          - TODO have slide after this talking about how it's hard to make a good analogy about how iterators work but that they're similarity Unix pipes or matroyshka dolls or maybe they're most similar to recursive xenomorphs, where each one is wrapped by another one and when you loop over the outside one it'll ask for an item from the inside one and it'll loop over whatever it's looping over, and so on...
+          - So...
+        </aside>
+      </section>
+
+      <section data-background-image="hello-kitty-pez.jpg">
+        <aside class="notes" data-markdown>
+          - While iterators *are* like Hello Kitty PEZ dispensers, that analogy doesn't really reflect the fact that iterators can be *wrapped* in other iterators
+          - You can sort of think of iterators as like...
+        </aside>
+      </section>
+
+      <section>
+        <img src="xenomorph.gif" class="no-style">
+        <aside class="notes" data-markdown>
+          - Xenomorphs
+          - ... except that you can wrap iterators as many levels deep as you want, the PEZ analogy still holds...
+          - So maybe iterators are really like...
+        </aside>
+      </section>
+
+      <section data-background-image="xenokitty.jpg">
+        <aside class="notes" data-markdown>
+          - Recursive Hello Kitty PEZ dispenser xenomorphs
+          - When you loop over iterators wrapped around iterators, the outer one has to *delegate* to the inner one, repeatedly, until you get to the inner most one... and then you have to work back up to get the item you're looking for.
+          - ...
+          - If this analogy isn't satisfying I don't know what will be...
         </aside>
       </section>
 
@@ -673,7 +756,7 @@ total = sum(n**2 for n in range(1000))
           - There are 3 ways to wrap around an iterator... **(click)**
           - You can either write a generator function **(click)** that you'll pass your iterator to
           - Or you can write a generator expression **(click)** that you'll use to loop over it
-          - Or you can call some other function that'll accept an iterator **(click)**, do some work, and return another iterator... like the `csv.reader` function or the built-in `enumerate` function do
+          - Or you can call some other function that'll accept an iterator **(click)**, do some work, and return another iterator... like `csv.reader` does
           - There are also a couple ways ways to loop over iterator... **(click)**
           - The obvious way is to write a `for` loop **(click)**
           - But you could also write a list comprehension **(click)**
@@ -688,15 +771,9 @@ total = sum(n**2 for n in range(1000))
       <section>
         <h2 class="fragment">Code you don't need to write</h2>
         <aside class="notes" data-markdown>
-          - While you're wrapping iterators in iterators and thinking up what generator functions you could write to using lazy looping in your own code...
-          - I want you to remember that the best code, **(click)** is code you don't even need to write.
+          - While you're wrapping iterators in iterators and thinking up what generator functions you could write to embrace lazy looping in your own code...
+          - You should remember that the best code, **(click)** is code you don't even need to write.
           - For example...
-          - TODO sum up this whole section to this... and move it later (after around problem):
-            - This enumerate generator function shouldn't exist... because this is built right into Python!
-            - This first_n function that yields just the first `n` items in an iterable, which might be handy when working with iterators... this function also shouldn't exist: because the standard library has a function called islice that does the same thing
-            - when you're practicing lazy looping, look in the Python built-ins, look in the itertools module, and look in a couple third-party libraries to see if someone else has already written the iterator helper you need... for example that `around` function we made... we could have used the boltons library or the more-itertools library to do most of the work inside this function for us.
-
-          - TODO discuss how this applies to Django querysets... useful for processing querysets without taking up lots of memory but also discuss iterator() method (iterator method: Django querysets store the entire results of their queries in memory, which is usually great performance-wise, but that can be a problem if you need to process millions of rows)
         </aside>
       </section>
 
@@ -709,9 +786,9 @@ def enumerate(iterable, start=0):
         n += 1
         </code></pre>
         <aside class="notes" data-markdown>
-          - This generator function, should not be written.
-          - There's no reason to write your own `enumerate` function because Python already has a function that does the exactly same thing and it even has the same name
-          - `enumerate` isn't the lazy iteration helper that's built-in to Python...
+          - This generator function, doesn't need to exist
+          - There's no reason you'd ever need to write this code because Python has a built-in `enumerate` function that does exactly the same thing and also returns a lazy iterator: just like this generator function does
+          - `enumerate` isn't the only lazy iteration helper that's built-in to Python...
         </aside>
       </section>
 
@@ -721,7 +798,7 @@ def enumerate(iterable, start=0):
           <li>enumerate</li>
           <li class="fragment">zip</li>
           <li class="fragment">reversed</li>
-          <li class="fragment">map and filter <span class="fragment">(which I don't recommend)</span></li>
+          <li class="fragment">map and filter <span class="fragment">(which I usually avoid)</span></li>
           <li class="fragment">any and all</li>
         </ul>
         <aside class="notes" data-markdown>
@@ -730,7 +807,7 @@ def enumerate(iterable, start=0):
           - reversed, which lazily reverses sequences
           - map and filter, which I don't usually recommend using because they do the same thing as generator expressions and I usually find them less readable
           - And there's any and all which pair *really* nicely with generator expressions
-          - TODO maybe show next slide of examples instead of just words
+          - TODO maybe actual examples quickly instead of just words?
         </aside>
       </section>
 
@@ -1413,7 +1490,6 @@ with open('logs.txt') as log_file:
       -->
 
       <section>
-        <h2>Recap</h2>
         <ul>
           <li class="fragment">Iterators are lazy single-use iterables</li>
           <li class="fragment">Generators are the "easy" way to make an iterator</li>
@@ -1421,6 +1497,8 @@ with open('logs.txt') as log_file:
           <li class="fragment">Wrapping iterators-in-iterators can break up large loops into small understandable steps</li>
         </ul>
         <aside class="notes" data-markdown>
+          - TODO make this better
+            -  iterators can be help you avoid taking up memory you don't need to: with a large file, when processing millions of database records one-by-one, or when looping over any big data structure
           - Iterators are lazy single-use iterables **(click)** that compute their next item as you loop over them
           - you "consume" items as you loop over an iterator and iterators are exhausted once they've been fully looped over
           - The easiest way to make your own iterator is to make a generator **(click)** (either by a writing generator function or a generator expressions)
@@ -1458,7 +1536,6 @@ with open('logs.txt') as log_file:
         <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
         </p>
           <p><small>
-            <a href="https://commons.wikimedia.org/wiki/File:Hand_tally_and_knitting_row_counter_007.jpg">Tally counter image &copy; Linda Spashett, CC BY</a><br>
             <a href="https://www.flickr.com/photos/30223382@N06/4151828376">Hello Kitty PEZ image &copy; Deborah Austin, CC BY</a><br>
           </small></p>
         <aside class="notes" data-markdown>
